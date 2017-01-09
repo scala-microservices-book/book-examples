@@ -1,0 +1,13 @@
+GET         /                        controllers.HomeController.index
+GET         /:name                   controllers.HomeController.hello(name:String)
+GET         /sqrt/:num               controllers.HomeController.sqrt(num:String)
+
+GET         /user/getAllUsers        controllers.Users.getAllUsers
+GET         /user/:name/:age         controllers.Users.getUser(name:String, age:Int)
+POST        /user/addUser            controllers.Users.addUser
+
+GET         /auth/index              controllers.LoginController.index
+GET         /auth/logout             controllers.LoginController.logout
+GET         /auth/login              controllers.LoginController.login(name:String, password: String)
+
+
