@@ -6,9 +6,9 @@ import play.api.mvc.{Action, Controller}
 object LoginController extends Controller {
   def login(name: String, password: String) = Action { implicit request =>
     if (check(name, password))
-      Redirect(routes.LoginController.index())
+      Redirect("/auth/index")
         .withSession(("user", name))
-    else BadRequest("Invalid password")
+    else BadRequest("Invalid username or password")
   }
 
   def index = Action{ implicit request =>
