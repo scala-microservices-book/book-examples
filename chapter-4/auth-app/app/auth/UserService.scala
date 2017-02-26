@@ -1,9 +1,8 @@
-package services
+package auth
 
 import javax.inject.{Inject, Singleton}
 
 import com.microservices.auth.User
-import dao.{UserAuth, UserDao}
 import org.mindrot.jbcrypt.BCrypt
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,7 +26,7 @@ class UserService @Inject()(userDao: UserDao) {
   def validateUser(email:String, password:String)(implicit exec:ExecutionContext): Future[Boolean] = {
     userDao.getUserByEmail(email).map {
       case Some(auth) => checkPassword(password, auth.passwdHash)
-      case None => throw new IllegalArgumentException("No user exists for the given email Id")
+      case None => false
     }
   }
 

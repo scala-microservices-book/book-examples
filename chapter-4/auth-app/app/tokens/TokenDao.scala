@@ -1,4 +1,4 @@
-package dao
+package tokens
 
 import javax.inject.{Inject, Singleton}
 

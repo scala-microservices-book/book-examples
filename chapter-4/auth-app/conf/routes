@@ -1,5 +1,6 @@
-POST        /users/register               controllers.UserController.register
-GET         /                             controllers.UserController.getAll
+POST        /v1/auth/register                     auth.UserController.register
+POST        /v1/auth/login                        auth.UserController.login
+GET         /v1/auth/logout/:token                auth.UserController.logout(token:String)
 
-
-GET         /tokens/refresh/:token        controllers.TokenController.refreshToken(token:String)
+GET         /v1/tokens/refresh/:token             tokens.TokenController.refreshToken(token:String)
+GET         /v1/tokens/authenticate/:token        tokens.TokenController.authenticate(token:String)
