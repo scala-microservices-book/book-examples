@@ -37,9 +37,11 @@ export default class Layout extends React.Component {
     const { visible } = this.state;
     return (
       <div>
-        
         <Sidebar.Pushable as={Segment}>
-          <Sidebar as={Menu} animation='slide along' width='thin' visible={visible} icon='labeled' vertical inverted>
+          <Sidebar as={Menu} animation='scale down' width='thin' direction='right' visible={visible} icon='labeled' vertical inverted>
+            <Menu.Item name='welcome'>
+              Welcome {this.state.email}
+            </Menu.Item>
             <Menu.Item onClick={this.logoutRequest.bind(this)} name='sign out'>
               <Icon name='sign out' />
               Sign Out
