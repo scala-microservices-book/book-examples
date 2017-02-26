@@ -5,3 +5,6 @@ target
 *.iws
 .idea
 out
+node_modules
+babel_cache
+.DS_Store
