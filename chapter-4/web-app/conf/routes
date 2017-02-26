@@ -1,0 +1,7 @@
+GET        /api/status          controller.MainController.status
+GET         /dashboard          controllers.Assets.at(path="/public", file="index-static.html")
+POST        /api/login           controller.MainController.login
+
+
+GET        /                    controllers.Assets.at(path="/public", file="index-static.html")
+GET        /assets/*file        controllers.Assets.at(path="/public", file)

@@ -1,0 +1,40 @@
+package dao
+
+import javax.inject.Singleton
+
+import com.google.inject.Inject
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import slick.driver.JdbcProfile
+import slick.jdbc.GetResult
+import utils.Contexts
+
+import scala.concurrent.Future
+
+
+
+
+case class UserAuth(email:String, passwdHash:String, creationTime:Long)
+
+@Singleton
+class UserDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, contexts: Contexts) extends HasDatabaseConfigProvider[JdbcProfile] {
+
+  implicit val executionContext = contexts.cpuLookup
+
+  import driver.api._
+
+  implicit val getUserResult = GetResult(r => UserAuth(r.nextString, r.nextString, r.nextLong()))
+
+
+  def getUserByEmail(email:String): Future[Option[UserAuth]] = {
+    db.run(sql"select email, passwdHash, creationTime from users where email = $email".as[UserAuth].headOption)
+  }
+
+  def createUser(user:UserAuth): Future[Int] = {
+    db.run(sqlu"insert into users (email, passwdHash, creationTime) values (${user.email}, ${user.passwdHash}, ${user.creationTime})")
+  }
+
+  def getAllUsers: Future[Vector[String]] = {
+    db.run(sql"select email from users".as[String])
+  }
+
+}

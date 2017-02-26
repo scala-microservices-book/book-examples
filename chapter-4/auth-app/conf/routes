@@ -1,0 +1,5 @@
+POST        /users/register               controllers.UserController.register
+GET         /                             controllers.UserController.getAll
+
+
+GET         /tokens/refresh/:token        controllers.TokenController.refreshToken(token:String)
