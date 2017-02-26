@@ -9,8 +9,11 @@ import play.api.mvc.{Action, Controller}
 
 @Singleton
 class MainController @Inject()() extends Controller{
+
   def status= Action{
-    Ok("")
+    // Check for valid session here.
+    // return 403 if session not found
+    Ok(Json.parse("{\"message\":\"success\"}"))
   }
 
 
@@ -32,5 +35,10 @@ class MainController @Inject()() extends Controller{
         | "message" : "succes"
         |}
       """.stripMargin)
+  }
+
+  def logout = Action{
+    // Delete session entry for request SID
+    Ok(Json.parse("{\"message\":\"success\"}"))
   }
 }
