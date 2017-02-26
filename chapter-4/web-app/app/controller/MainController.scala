@@ -10,10 +10,12 @@ import play.api.mvc.{Action, Controller}
 @Singleton
 class MainController @Inject()() extends Controller{
 
-  def status= Action{
-    // Check for valid session here.
-    // return 403 if session not found
-    Ok(Json.parse("{\"message\":\"success\"}"))
+  def status= Action{ request =>
+      request.session.get("email").map { email =>
+        Ok(Json.parse("{\"message\":\"success\"}"))
+      }.getOrElse {
+        Unauthorized("Oops, you are not connected")
+      }
   }
 
 
@@ -28,17 +30,13 @@ class MainController @Inject()() extends Controller{
 
   def login = Action(parse.form(userForm)){implicit request =>
     val body = request.body
-
-    Ok(
-      """
-        |{
-        | "message" : "succes"
-        |}
-      """.stripMargin)
+    Ok(Json.parse("{\"message\":\"success\"}")).withSession(
+      "email" -> "test@test.com")
   }
 
   def logout = Action{
     // Delete session entry for request SID
-    Ok(Json.parse("{\"message\":\"success\"}"))
+    Ok(Json.parse("{\"message\":\"success\"}")).withNewSession
+//    Ok(Json.parse("{\"message\":\"success\"}"))
   }
 }
