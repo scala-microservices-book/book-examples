@@ -7,3 +7,4 @@ create table tokens(key VARCHAR NOT NULL  PRIMARY KEY , token VARCHAR NOT NULL U
 # --- !Downs
 
 drop table users;
+drop table tokens;

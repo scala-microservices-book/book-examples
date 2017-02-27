@@ -24,7 +24,7 @@ lazy val commons = BaseProject("commons")
   .settings(libraryDependencies ++= Seq(json, specs2 % Test))
 
 lazy val `web-app` = PlayProject("web-app")
-  .settings(libraryDependencies ++= Seq(json, cache, ws, specs2 % Test))
+  .settings(libraryDependencies ++= Seq(parserCombinator, json, cache, ws, specs2 % Test))
   .dependsOn(commons)
 
 lazy val `so-app` = PlayProject("so-app")
@@ -64,6 +64,7 @@ val slickV = "3.1.1"
 val h2V = "1.4.193"
 val playSlickV = "2.0.2"
 val jbcryptV = "0.4"
+val parserCombinatorV = "1.0.5"
 
 val slick = "com.typesafe.slick" %% "slick" % slickV
 val slickHikariCP = "com.typesafe.slick" %% "slick-hikaricp" % slickV
@@ -71,7 +72,7 @@ val h2 = "com.h2database" % "h2" % h2V
 val playSlick = "com.typesafe.play" %% "play-slick" % playSlickV
 val playSlickEvolutions = "com.typesafe.play" %% "play-slick-evolutions" % playSlickV
 val jbcrypt = "org.mindrot" % "jbcrypt" % jbcryptV
-
+val parserCombinator = "org.scala-lang.modules" % "scala-parser-combinators_2.11" % parserCombinatorV
 
 val runAll = inputKey[Unit]("Runs all subprojects")
 

@@ -6,8 +6,9 @@ import com.microservices.search.SearchFilter
 import play.api.libs.json.Json
 import play.api.mvc._
 import service.SearchService
-import users.Contexts
+import users.{Contexts, SOSearchResult}
 
+import scala.collection.immutable.Seq
 import scala.concurrent.Future
 
 @Singleton
@@ -32,7 +33,7 @@ class SearchController @Inject()(service: SearchService, context:Contexts) exten
       search(SearchFilter(Option(location), Option(tag))).map(x => Ok(Json.toJson(x)))
   }
 
-  private def search(filter:SearchFilter) = {
+  private def search(filter:SearchFilter): Future[Seq[SOSearchResult]] = {
     service.searchFlatten(filter)
   }
 

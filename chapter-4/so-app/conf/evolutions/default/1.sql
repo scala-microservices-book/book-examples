@@ -9,7 +9,9 @@ create table so_user_info (
   location VARCHAR(30)
   );
 
-create table so_tag (id INT AUTO_INCREMENT, name VARCHAR(20) NOT NULL PRIMARY KEY);
+create table so_tag (
+  id INT AUTO_INCREMENT,
+  name VARCHAR(20) NOT NULL PRIMARY KEY);
 
 create table so_reputation(
   id INT AUTO_INCREMENT,
