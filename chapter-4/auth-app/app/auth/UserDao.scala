@@ -30,6 +30,7 @@ class UserDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
   }
 
   def getAllUsers: Future[Vector[String]] = {
+
     db.run(sql"select email from users".as[String])
   }
 
