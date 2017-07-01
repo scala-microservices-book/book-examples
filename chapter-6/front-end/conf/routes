@@ -1,0 +1,6 @@
+GET     /               controllers.MainController.index
+GET     /signup         controllers.MainController.index
+GET     /addFriend      controllers.MainController.index
+GET     /users/:id      controllers.MainController.userStream(id)
+GET     /assets/*file   controllers.Assets.versioned(path = "/public", file)
+GET     /cb             controllers.MainController.circuitBreaker
