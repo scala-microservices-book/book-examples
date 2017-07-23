@@ -1,5 +1,5 @@
 A twitter like application built using Lightbend Lagom. 
-This is built on top of the exising [lagom-scala-chirper](https://github.com/dotta/activator-lagom-scala-chirper). It contains a few changes when compared to original repo:
+This is built on top of the exising [lagom-scala-chirper](https://github.com/dotta/activator-lagom-scala-chirper) by [Mirco Dotta](https://twitter.com/mircodotta). It contains a few changes when compared to original repo:
 * It uses the scaladsl api instead of javadsl from scala
 
 ## Chapter examples
