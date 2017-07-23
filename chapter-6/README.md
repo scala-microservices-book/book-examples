@@ -5,7 +5,7 @@ This is built on top of the exising [lagom-scala-chirper](https://github.com/dot
 ## Chapter examples
 
 ### chapter-6
-Chapter-6 example code can be found on the master branch of this repository.
+Chapter-6 example code can be found on the `master` branch of this repository.
 
 * For the sake of learning. Chapter-6 code is bare minimum and does not use the Persistence API. All the data is simply stored on-memory using Map 
 
