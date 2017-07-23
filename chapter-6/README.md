@@ -12,7 +12,7 @@ Chapter-6 example code can be found on the master branch of this repository.
 ### chapter-7
 Chapter-7 example code can be found on the `chapter-7` branch of this repository.
 
-* Chapter-7 build on top of the `chapter-6` code where it uses Lagom's Message Broker API to publish and subscribe
+* Chapter-7 is built on top of the `chapter-6` code where it uses Lagom's Message Broker API to publish and subscribe
 
 
 ### chapter-8
@@ -20,8 +20,9 @@ Chapter-8 example code can be found on the `chapter-8` branch of this repository
 
 * Chapter-8 build on top of the `chapter-7` code where it uses Lagom's Persistence API
 
+## Run
 
-Start all services using `mvn lagom:runAll` or `sbt runAll`. To access the application: [http://localhost:9000](http://localhost:9000). 
+Start all services using `sbt runAll`. To access the application post the startup.: [http://localhost:9000](http://localhost:9000)
 * You can then signup 
 * Add a friend
 * And chirp
