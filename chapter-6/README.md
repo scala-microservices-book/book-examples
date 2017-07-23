@@ -5,14 +5,18 @@ This is built on top of the exising [lagom-scala-chirper](https://github.com/dot
 ## Chapter examples
 
 ### chapter-6
-Chapter-6 example code can be found on the `master` branch of this repository.
+Chapter-6 example code can be found on the `master` branch of this repository. For the sake of learning. Chapter-6 code is bare minimum and only uses Lagom service api related concepts
 
-* For the sake of learning. Chapter-6 code is bare minimum and does not use the Persistence API. All the data is simply stored on-memory using Map 
+* It does not use the Persistence API. All the data is simply stored on-memory using Map 
+* It neither relies on Apache Kafka
+
+Like it says: bare minimum
 
 ### chapter-7
 Chapter-7 example code can be found on the `chapter-7` branch of this repository.
 
 * Chapter-7 is built on top of the `chapter-6` code where it uses Lagom's Message Broker API to publish and subscribe
+* Use Apache Kafka as a message broker
 
 
 ### chapter-8
