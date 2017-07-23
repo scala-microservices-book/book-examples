@@ -77,28 +77,6 @@ lazy val frontEnd = project("front-end")
     ReactJsKeys.sourceMapInline := true
   )
 
-//lazy val loadTestApi = project("load-test-api")
-//  .settings(
-//    version := "1.0-SNAPSHOT",
-//    libraryDependencies += lagomScaladslApi
-//  )
-//
-//lazy val loadTestImpl = project("load-test-impl")
-//  .enablePlugins(LagomScala)
-//  .settings(
-//    version := "1.0-SNAPSHOT",
-//    libraryDependencies ++= Seq(
-//      macwire
-//    )
-//  )
-//  .dependsOn(loadTestApi, friendApi, activityStreamApi, chirpApi, utils)
-
-//lazy val utils = project("utils")
-//  .settings(
-//    version := "1.0-SNAPSHOT",
-//    libraryDependencies += lagomScaladslApi
-//  )
-
 def project(id: String) = Project(id, base = file(id))
   .settings(
     scalacOptions in Compile += "-Xexperimental" // this enables Scala lambdas to be passed as Scala SAMs  
