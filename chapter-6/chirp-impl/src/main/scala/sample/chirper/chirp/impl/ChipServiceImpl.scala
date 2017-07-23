@@ -37,7 +37,6 @@ class ChirpServiceImpl (
       val topic: PubSubRef[Chirp] = topics.refFor(TopicId(topicQualifier(userId)))
       topic.publish(chirp)
 
-
       this.synchronized {
         allChirps = chirp :: allChirps
       }

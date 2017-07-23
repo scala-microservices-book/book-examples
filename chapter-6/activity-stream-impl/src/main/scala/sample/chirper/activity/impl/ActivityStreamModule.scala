@@ -19,10 +19,6 @@ abstract class ActivityStreamModule (context: LagomApplicationContext)
   lazy val chirpService = serviceClient.implement[ChirpService]
 
   override lazy val lagomServer = serverFor[ActivityStreamService](wire[ActivityStreamServiceImpl])
-//      bindServices(serviceBinding(classOf[ActivityStreamService], classOf[ActivityStreamServiceImpl]))
-//      bindClient(classOf[FriendService])
-//      bindClient(classOf[ChirpService])
-
 }
 
 

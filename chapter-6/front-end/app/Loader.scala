@@ -20,16 +20,14 @@ abstract class FrontEndModule(context: Context) extends BuiltInComponentsFromCon
   override lazy val serviceInfo: ServiceInfo = ServiceInfo(
     "front-end",
     Map(
-      "front-end" -> immutable.Seq(ServiceAcl.forPathRegex("(?!/api_jatin/).*"))
+      "front-end" -> immutable.Seq(ServiceAcl.forPathRegex("(?!/api/).*"))
     )
   )
 
   override implicit lazy val executionContext: ExecutionContext = actorSystem.dispatcher
   override lazy val router = {
-    val prefix = "/"
     wire[Routes]
   }
-
 }
 
 class FrontEndLoader extends ApplicationLoader {
