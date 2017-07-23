@@ -90,3 +90,5 @@ def project(id: String) = Project(id, base = file(id))
 licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
 
 lagomCassandraEnabled in ThisBuild := false
+
+lagomKafkaEnabled in ThisBuild := false
