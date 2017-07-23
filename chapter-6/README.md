@@ -13,7 +13,7 @@ Chapter-6 example code can be found on the `master` branch of this repository. F
 Like it says: bare minimum
 
 ### chapter-7
-Chapter-7 example code can be found on the `chapter-7` branch of this repository.
+Chapter-7 example code can be found on the [chapter-7](https://github.com/scala-microservices-book/book-examples/tree/chapter-7/chapter-6) branch of this repository.
 
 * Chapter-7 is built on top of the `chapter-6` code where it uses Lagom's Message Broker API to publish and subscribe
 * Use Apache Kafka as a message broker
