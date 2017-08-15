@@ -1,10 +1,18 @@
-FROM anapsix/alpine-java
+## Docker install
 
-MAINTAINER Selvam Palanimalai 
+Follow the [installation guide](https://docs.docker.com/engine/installation/).
 
+## Docker build
 
-COPY target/universal/auth-app-0.1-SNAPSHOT.zip /opt/scala/auth-app.zip
+```shell
+$ cd ../chapter-4/
+$ docker build -t auth-app .
+```
 
-RUN unzip /opt/scala/auth-app.zip
+## Docker run
 
-CMD "/opt/scala/auth-app/bin/auth-app -Dplay.http.secret.key=abcdefghijk -Dplay.crypto.secret=$APP_SECRET"
+```shell
+$ cd ../chapter-4/
+$ docker run -d -e APP_SECRET="adqwlne2p123" -e HTTP_SECRET="324kjb23233WQ" -p 9000:9000 auth-app
+```
+
