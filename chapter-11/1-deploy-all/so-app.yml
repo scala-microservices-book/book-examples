@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: so-service
+  labels:
+    app: so
+    environment: production
+  annotations:
+    description: Stackoverflow search service
+spec:
+  type: LoadBalancer
+  sessionAffinity: None
+  ports:
+  - name: http-4000
+    port: 4000
+    targetPort: 9000
+    protocol: TCP
+  selector:
+    app: so
+    environment: production
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: so-deployment
+  labels:
+    app: so
+    environment: production
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: so
+        environment: production
+    spec:
+      containers:
+        - name: so-container
+          imagePullPolicy: Always
+          image: chartotu/so-app:latest
+          # command: [ "/bin/sh","-c","while true;do java -version; sleep 2; done" ]
+          env:
+          - name: APP_SECRET
+            value: "8gasd2312rgwe,ewewew"
+          - name: HTTP_SECRET
+            value: "342w9erwj32"

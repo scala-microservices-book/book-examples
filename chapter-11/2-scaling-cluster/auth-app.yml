@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  labels:
+    app: auth
+    environment: production
+spec:
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: auth
+        environment: production
+    spec:
+      containers:
+        - name: auth-container
+          imagePullPolicy: Always
+          image: chartotu/auth-app:latest
+          # command: [ "/bin/sh","-c","while true;do java -version; sleep 2; done" ]
+          env:
+          - name: APP_SECRET
+            value: "8gasd2312rgwe,ewewew"
+          - name: HTTP_SECRET
+            value: "342w9erwj32"
+
