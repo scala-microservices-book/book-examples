@@ -1,22 +1,25 @@
 package controllers
 
-import play.api.mvc.{Action, Controller}
+import javax.inject.Inject
+import javax.inject.Singleton
 
+import play.api.mvc._
 
-object Users extends Controller{
+@Singleton
+class Users @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
-  def getAllUsers = Action{ implicit request =>
+  def getAllUsers = Action {
     Ok.apply("")
   }
 
-  def getUser(name:String, age:Int) = Action{ implicit request =>
+  def getUser(name: String, age: Int) = Action {
     Ok(s"Hello $name of age: $age")
   }
 
-  def addUser() = Action{ implicit request =>
+  def addUser() = Action { implicit request =>
     val body = request.body
 
-    body.asFormUrlEncoded match{
+    body.asFormUrlEncoded match {
       case Some(map) =>
         //persist user information
         Ok(s"The user of name `${map("name").head}` and age `${map("age").head}` has been created\n")
