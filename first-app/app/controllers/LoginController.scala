@@ -18,7 +18,7 @@ class LoginController @Inject()(cc: ControllerComponents) extends AbstractContro
     request.session.get("user") match {
       case Some(user) if isValidUser(user) => Ok(s"Welcome $user")
       case Some(user) => BadRequest("Not a valid user")
-      case None => BadRequest("Please login by calling: \n" +
+      case None => BadRequest("You are currently not logged in. \nPlease login by calling: \n" +
         "http://localhost:9000/auth/login?name=admin&password=1234")
     }
   }
