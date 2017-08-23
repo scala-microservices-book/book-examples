@@ -10,16 +10,11 @@ trait SearchService {
 
   def searchInAll(word: String, root: File)(implicit exec: ExecutionContext): Future[Seq[File]] = {
     if (!root.isDirectory) {
-      throw new IllegalArgumentException("input must be a directory")
+      search(word, root).map(found => if (found) Seq(root) else Seq())
+    } else {
+      val all = root.listFiles().toList.map(x => searchInAll(word, x))
+      Future.sequence(all).map(x => x.flatten)
     }
-
-    val all = root.listFiles().toSeq.map(file => {
-      if (file.isDirectory)
-        searchInAll(word, file)
-      else search(word, file).map(exists => if(exists) Seq(file) else Seq())
-    })
-
-    Future.sequence(all).map(x => x.flatten)
   }
 
 }
