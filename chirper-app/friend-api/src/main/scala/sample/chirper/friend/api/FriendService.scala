@@ -44,15 +44,14 @@ trait FriendService extends Service {
    * The ID for this service call is the Id of the user to get the followers for.
    * The response message is the list of follower IDs.
    */
-  def getFollowers(id: String): ServiceCall[NotUsed, Seq[String]]
+  def getFollowers(userId: String): ServiceCall[NotUsed, Seq[String]]
 
   override def descriptor(): Descriptor = {
     import Service._
 
-
     named("friendservice").withCalls(
         pathCall("/api/users/:id", getUser _),
-        namedCall("/api/users", createUser _),
+        namedCall("/api/users", createUser),
         pathCall("/api/users/:userId/friends", addFriend _),
         pathCall("/api/users/:id/followers", getFollowers _)
       ).withAutoAcl(true)
