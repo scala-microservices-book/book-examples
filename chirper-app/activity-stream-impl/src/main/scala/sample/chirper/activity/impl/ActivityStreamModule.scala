@@ -15,8 +15,8 @@ import sample.chirper.friend.api.FriendService
 abstract class ActivityStreamModule (context: LagomApplicationContext)
   extends LagomApplication(context)
     with AhcWSComponents {
-  lazy val friendService = serviceClient.implement[FriendService]
-  lazy val chirpService = serviceClient.implement[ChirpService]
+  lazy val friendService: FriendService = serviceClient.implement[FriendService]
+  lazy val chirpService: ChirpService = serviceClient.implement[ChirpService]
 
   override lazy val lagomServer = serverFor[ActivityStreamService](wire[ActivityStreamServiceImpl])
 }
@@ -30,9 +30,7 @@ class ActivityStreamApplicationLoader extends LagomApplicationLoader {
   //    new FriendModule(context) with ConductRApplicationComponents
     new ActivityStreamModule(context) with LagomDevModeComponents
 
-  override def describeServices = List(
-    readDescriptor[FriendService]
-  )
+  override def describeService = Some(readDescriptor[FriendService])
 }
 
 

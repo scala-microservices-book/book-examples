@@ -7,8 +7,8 @@ import java.time.Instant
 import java.util.UUID
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import play.api.libs.json.{JsPath, Json, OFormat, Reads}
-import play.api.libs.functional.syntax._ // Combinator syntax
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads} // Combinator syntax
 
 case class Chirp (userId: String, message: String, @JsonIgnore timestamp: Instant,@JsonIgnore uuid: String) {
   def this(userId: String, message: String) =

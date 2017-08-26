@@ -18,8 +18,7 @@ object ChirpServiceImpl {
   final val MaxTopics = 1024
 }
 
-class ChirpServiceImpl (
-  topics: PubSubRegistry)(implicit ex: ExecutionContext) extends ChirpService {
+class ChirpServiceImpl (topics: PubSubRegistry)(implicit ex: ExecutionContext) extends ChirpService {
 
 
   private val log = LoggerFactory.getLogger(classOf[ChirpServiceImpl])
