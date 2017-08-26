@@ -26,7 +26,5 @@ class ChirpApplicationLoader extends LagomApplicationLoader {
 //    new ChirpModule(context) with ConductRApplicationComponents
     new ChirpModule(context) with LagomDevModeComponents
 
-  override def describeServices = List(
-    readDescriptor[ChirpService]
-  )
+  override def describeService = Some(readDescriptor[ChirpService])
 }
