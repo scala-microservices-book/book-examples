@@ -2,17 +2,21 @@
 
 In this tutorial, we will deploy pods and services for all 3 microservices of the seeker example app.
 
-We will create a new namespace called `seeker`
+We will create a new namespace called `sm-seeker`
 
 ```bash
-@ kubectl create namespace "seeker"
+@ kubectl create namespace "sm-seeker"
 ```
 
 Deploy all pods and services.
 ```bash
-$ kubectl apply -f auth-app.yml -n seeker
-$ kubectl apply -f web-app.yml -n seeker
-$ kubectl apply -f so-app.yml -n seeker
+$ cd auth-app/
+$ kubectl apply -f 10-cmaps.yml -n sm-seeker
+$ kubectl apply -f 10-secrets.yml -n sm-seeker
+$ kubectl apply -f deployment.yml -n sm-seeker
+$ kubectl apply -f service.yml -n sm-seeker
+
+Repeat this for so-app and web-app.
 ```
 
 Check our deployments.
