@@ -25,3 +25,7 @@ $ kubectl get deployments -n seeker
 $ kubectl get services -n seeker
 $ kubectl get pods -n seeker
 ```
+
+Now visit http://127.0.0.1:8001/api/v1/proxy/namespaces/sm-seeker/services/auth-service:2000/
+
+You should see play framework error page.
