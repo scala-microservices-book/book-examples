@@ -16,6 +16,8 @@ lazy val friendImpl = project("friend-impl")
     version := "1.0-SNAPSHOT",
     libraryDependencies ++= Seq(
       lagomScaladslTestKit,
+      lagomScaladslPersistenceCassandra,
+      "com.datastax.cassandra" % "cassandra-driver-extras" % "3.0.0",
       macwire
     )
   )
@@ -37,6 +39,7 @@ lazy val chirpImpl = project("chirp-impl")
     libraryDependencies ++= Seq(
       lagomScaladslPubSub,
       lagomScaladslTestKit,
+      lagomScaladslPersistenceCassandra,
       macwire
     )
   )
@@ -89,6 +92,9 @@ def project(id: String) = Project(id, base = file(id))
 
 licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
 
-lagomCassandraEnabled in ThisBuild := false
+lagomCassandraEnabled in ThisBuild := true
+
+// do not delete database files on start
+lagomCassandraCleanOnStart in ThisBuild := false
 
 lagomKafkaEnabled in ThisBuild := false
