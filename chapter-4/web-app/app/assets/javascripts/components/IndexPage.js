@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import athletes from '../data/athletes';
 import {Form, Button, Input} from 'semantic-ui-react';
 import queryString from 'query-string';
 
