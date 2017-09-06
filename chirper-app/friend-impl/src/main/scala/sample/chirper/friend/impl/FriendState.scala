@@ -14,4 +14,6 @@ case class FriendState(user: Option[User]) {
 
 object FriendState {
   def apply(user: User): FriendState = FriendState(Option(user))
+
+  def emptyState: FriendState = FriendState(None)
 }

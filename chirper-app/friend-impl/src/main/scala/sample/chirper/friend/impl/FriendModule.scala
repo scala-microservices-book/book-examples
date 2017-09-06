@@ -5,13 +5,22 @@ package sample.chirper.friend.impl
 
 
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
+import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server.{LagomApplication, LagomApplicationContext, LagomApplicationLoader, LagomServer}
 import com.softwaremill.macwire.wire
 import play.api.libs.ws.ahc.AhcWSComponents
 import sample.chirper.friend.api.FriendService
 
-abstract class FriendModule (context: LagomApplicationContext) extends LagomApplication(context) with AhcWSComponents {
+abstract class FriendModule (context: LagomApplicationContext)
+  extends LagomApplication(context)
+    with AhcWSComponents
+  with CassandraPersistenceComponents
+{
   override lazy val lagomServer: LagomServer = serverFor[FriendService](wire[FriendServiceImpl])
+  persistentEntityRegistry.register(wire[FriendEntity])
+  readSide.register(wire[FriendEventProcessor])
+
+  override def jsonSerializerRegistry = ???
 }
 
 class FriendApplicationLoader extends LagomApplicationLoader {

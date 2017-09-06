@@ -3,78 +3,47 @@
  */
 package sample.chirper.friend.impl
 
-import java.util.concurrent.{ConcurrentHashMap, ConcurrentLinkedQueue}
-
+import akka.persistence.cassandra.session.scaladsl.CassandraSession
 import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.NotFound
+import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
+import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraReadSide
 import sample.chirper.friend.api.{CreateUser, FriendId, FriendService, User}
 
 import scala.collection.immutable.Seq
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
-class FriendServiceImpl()(implicit ec: ExecutionContext) extends FriendService {
+class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,  readSide: CassandraReadSide,
+                        db: CassandraSession)(implicit ec: ExecutionContext) extends FriendService {
 
-  val userMap = new ConcurrentHashMap[String, User]()
-
-  val friendsMap = new ConcurrentHashMap[String, ConcurrentLinkedQueue[User]]()
-
-  override def getUser(id: String): ServiceCall[NotUsed, User] = {
+ override def getUser(id: String): ServiceCall[NotUsed, User] = {
     request =>
-      val user = userMap.get(id)
-      if (user == null)
-        throw NotFound(s"user $id not found")
-      else {
-        Future.successful(getUser(user.userId, user.name))
-      }
+      friendEntityRef(id).ask(GetUser())
+        .map(_.user.getOrElse(throw NotFound(s"user $id not found")))
   }
 
   override def createUser(): ServiceCall[CreateUser, Done] = {
     request =>
-      this.synchronized {
-        val alreadyExists = userMap.get(request.userId)
-        if (alreadyExists != null) {
-          throw NotFound(s"user $request already exists")
-        }
-
-        val user = User(request)
-        userMap.put(request.userId, user)
-        val friends = new ConcurrentLinkedQueue[User]()
-
-        friendsMap.put(user.userId, friends)
-        Future.successful(Done)
-      }
+        friendEntityRef(request.userId).ask(CreateUserCommand(User(request)))
   }
 
   override def addFriend(userId: String): ServiceCall[FriendId, Done] = {
     request =>
-      val user = userMap.get(userId)
-
-      if (user == null)
-        throw NotFound(s"user $userId not found")
-      else {
-        val friendsList = friendsMap.get(userId)
-        val friend = userMap.get(request.friendId)
-        friendsList.add(friend)
-        Future.successful(Done)
-      }
+      friendEntityRef(userId).ask(AddFriend(request.friendId))
   }
 
-
   override def getFollowers(id: String): ServiceCall[NotUsed, Seq[String]] = {
-    req => {
-      val user = userMap.get(id)
-      if (user == null)
-        throw NotFound(s"user $id not found")
-      else {
-        Future.successful(getUser(user.userId, user.name).friends)
+    req =>
+    {
+      db.selectAll("SELECT * FROM follower WHERE userId = ?", id).map { jrows =>
+        val rows = jrows.toVector
+        rows.map(_.getString("followedBy"))
       }
     }
   }
 
-  private def getUser(userId: String, name: String): User = {
-    import scala.collection.JavaConverters._
 
-    User(userId, name, friendsMap.get(userId).asScala.toList.map(x => x.userId))
-  }
+  private def friendEntityRef(userId: String) =
+    persistentEntities.refFor[FriendEntity](userId)
 }
