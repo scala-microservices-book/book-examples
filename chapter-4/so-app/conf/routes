@@ -1,2 +1,3 @@
 POST        /so/v1/search         controllers.SearchController.searchPost
+POST        /so/v1/search_test    controllers.SearchController.searchPostTest
 GET         /so/v1/search/        controllers.SearchController.searchGet(location:String, tag:String)

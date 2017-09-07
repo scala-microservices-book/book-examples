@@ -57,7 +57,7 @@ export default class Layout extends React.Component {
                           <Link to="/">
                           <Header as='h2'>
                             <Image shape='circular' src='http://semantic-ui.com/images/avatar2/large/patrick.png' />
-                            {' '} Seeker
+                            {' '} Seeker2
                           </Header>
                           </Link>
                       </Grid.Column>

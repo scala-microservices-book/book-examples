@@ -29,19 +29,22 @@ class SearchDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
       """select a.id,a.name, a.so_account_id, a.about_me, a.so_link, a.location, c.id,c.name,b.points from so_user_info a
             join so_reputation b
               on b.user=a.id
-            join so_tag c on b.tag=c.id where 1=1"""
+            join so_tag c on b.tag=c.id where 1=1 limit 10"""
 
     val allFuture = (location, tag) match {
       case (Some(loc), Some(t)) =>
-        db.run(sql"""#$selectQ
-              AND UPPER (a.location) = UPPER(${loc})
-              AND UPPER (c.name) = UPPER (${t})""".as[(SOUser, SOTag, Int)])
+        db.run(sql"""#$selectQ""".as[(SOUser, SOTag, Int)])
+        // db.run(sql"""#$selectQ
+        //       AND UPPER (a.location) = UPPER(${loc})
+        //       AND UPPER (c.name) = UPPER (${t})""".as[(SOUser, SOTag, Int)])
       case (Some(loc), None) =>
-        db.run(sql"""#$selectQ
-              AND UPPER (a.location) = UPPER(${loc})""".as[(SOUser, SOTag, Int)])
+        db.run(sql"""#$selectQ""".as[(SOUser, SOTag, Int)])
+        // db.run(sql"""#$selectQ
+        //       AND UPPER (a.location) = UPPER(${loc})""".as[(SOUser, SOTag, Int)])
       case (None, Some(t)) =>
-        db.run(sql"""#$selectQ
-              AND UPPER (c.name) = UPPER (${t})""".as[(SOUser, SOTag, Int)])
+        db.run(sql"""#$selectQ""".as[(SOUser, SOTag, Int)])
+        // db.run(sql"""#$selectQ
+        //       AND UPPER (c.name) = UPPER (${t})""".as[(SOUser, SOTag, Int)])
       case (None, None) => db.run(sql"""#$selectQ""".as[(SOUser, SOTag, Int)])
     }
 
