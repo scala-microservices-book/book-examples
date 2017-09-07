@@ -10,7 +10,7 @@ object FriendEvent {
   val Tag = AggregateEventTag[FriendEvent]
 }
 sealed trait FriendEvent extends AggregateEvent[FriendEvent] {
-  override def aggregateTag(): AggregateEventTag[FriendEvent] = FriendEvent.Tag
+  override def aggregateTag(): AggregateEventTag[FriendEvent] = new AggregateEventTag[FriendEvent](classOf[FriendEvent], "StableFriendEvent")
 }
 
 case class UserCreated(userId: String, name: String, timestamp: Instant = Instant.now()) extends FriendEvent
