@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sm-cmaps-auth
+data: 
+  application.conf: | 
+    slick.dbs.default.driver="slick.driver.H2Driver$"
+    slick.dbs.default.db.driver="org.h2.Driver"
+    slick.dbs.default.db.url="jdbc:h2:~/h2"
+    slick.dbs.default.db.user=sa
+    slick.dbs.default.db.password=""
+
+    #run conf/userdb/1.sql by userdb
+    //play.applyEvolutions.default=true
+    play.evolutions.autoApply=true
+
+    evolutionplugin=enabled
+    play.evolutions.db.default.autoApply=true
+    play.evolutions.db.default.autoApplyDowns=true
+
+    contexts {
+      db-lookups{
+        throughput = 1
+        thread-pool-executor {
+          fixed-pool-size = 10
+        }
+      }
+
+      cpu-operations {
+        fork-join-executor {
+          parallelism-max = 2
+        }
+      }
+    }
+
+
+    token {
+      ttl = 86400000 # seconds
+    }

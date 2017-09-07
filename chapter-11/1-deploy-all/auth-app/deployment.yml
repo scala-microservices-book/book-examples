@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  labels:
+    app: auth
+    environment: production
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: auth
+        environment: production
+    spec:
+      volumes:
+        - name: sm-cmaps-auth-volume
+          configMap:
+            name: sm-cmaps-auth
+      containers:
+        - name: auth-container
+          imagePullPolicy: Always
+          image: chartotu/auth-app:latest
+          workingDir: 
+          # command: [ "/bin/sh","-c","while true;do java -version; sleep 2; done" ]
+          env:
+          - name: APP_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: sm-secrets-auth
+                key: APP_SECRET
+          - name: HTTP_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: sm-secrets-auth
+                key: HTTP_SECRET     
+          volumeMounts:
+            - name: sm-cmaps-auth-volume
+              mountPath: /opt/auth-app/conf/application.conf
+              readOnly: true

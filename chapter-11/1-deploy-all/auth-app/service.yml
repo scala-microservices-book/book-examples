@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  labels:
+    app: auth
+    environment: production
+  annotations:
+    description: Authenication for our seeker application
+spec:
+  type: LoadBalancer
+  sessionAffinity: None
+  ports:
+  - name: http-2000
+    port: 2000
+    targetPort: 9000
+    protocol: TCP
+  selector:
+    app: auth
+    environment: production
