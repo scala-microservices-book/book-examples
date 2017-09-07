@@ -5,7 +5,7 @@ import com.lightbend.lagom.scaladsl.persistence.PersistentEntity
 
 class FriendEntity extends PersistentEntity{
   override type Command = FriendCommand
-  override type Event = FriendCommand
+  override type Event = FriendEvent
   override type State = FriendState
 
   override def initialState = ???

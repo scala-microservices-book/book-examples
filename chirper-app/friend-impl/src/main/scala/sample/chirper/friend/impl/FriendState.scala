@@ -1,5 +1,6 @@
 package sample.chirper.friend.impl
 
+import play.api.libs.json.Json
 import sample.chirper.friend.api.User
 
 
@@ -16,4 +17,6 @@ object FriendState {
   def apply(user: User): FriendState = FriendState(Option(user))
 
   def emptyState: FriendState = FriendState(None)
+
+  implicit val format = Json.format[FriendState]
 }

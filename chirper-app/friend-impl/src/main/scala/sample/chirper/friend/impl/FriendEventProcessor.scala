@@ -90,6 +90,7 @@ class FriendEventProcessor(session: CassandraSession, readSide: CassandraReadSid
 //    .setEventHandler[AuctionStarted](e => updateItemSummaryStatus(e.entityId, api.ItemStatus.Auction))
 //    .setEventHandler[AuctionFinished](e => updateItemSummaryStatus(e.entityId, api.ItemStatus.Completed))
 //    .build
+  ???
 }
 
   override def aggregateTags = Set(FriendEvent.Tag)

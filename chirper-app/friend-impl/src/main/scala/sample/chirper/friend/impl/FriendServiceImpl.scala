@@ -3,7 +3,7 @@
  */
 package sample.chirper.friend.impl
 
-import akka.persistence.cassandra.session.scaladsl.CassandraSession
+import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.NotFound
