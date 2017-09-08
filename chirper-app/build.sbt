@@ -97,4 +97,6 @@ lagomCassandraEnabled in ThisBuild := true
 // do not delete database files on start
 lagomCassandraCleanOnStart in ThisBuild := false
 
+lagomCassandraPort in ThisBuild := 4042
+
 lagomKafkaEnabled in ThisBuild := false
