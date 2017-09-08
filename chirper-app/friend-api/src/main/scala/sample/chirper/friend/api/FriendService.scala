@@ -66,7 +66,7 @@ trait FriendService extends Service {
           topic(FriendService.TOPIC_NAME, friendsTopic)
             .addProperty(
               KafkaProperties.partitionKeyStrategy,
-              PartitionKeyStrategy[KFriendMessage](_ => "")
+              PartitionKeyStrategy[KFriendMessage](_ => "0")
             )
       ).withAutoAcl(true)
 

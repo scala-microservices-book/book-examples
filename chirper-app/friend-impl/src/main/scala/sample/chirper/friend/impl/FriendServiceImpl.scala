@@ -47,16 +47,20 @@ class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,
   private def friendEntityRef(userId: String) =
     persistentEntities.refFor[FriendEntity](userId)
 
-  override def friendsTopic = TopicProducer.singleStreamWithOffset[KFriendMessage] {
+  override def friendsTopic = TopicProducer.singleStreamWithOffset {
     fromOffset =>
+      println("friendsTopic caled "+fromOffset)
       persistentEntities.eventStream(FriendEvent.Tag, fromOffset)
-        .map(ev => (convertEvent(ev), ev.offset))
+        .map(ev => {
+          println("sender: "+ev)
+          (convertEvent(ev), ev.offset)
+        })
   }
 
   def convertEvent(helloEvent: EventStreamElement[FriendEvent]): KFriendMessage = {
     helloEvent.event match {
       case FriendAdded(user, friendId, ts) => KFriendAdded(user, friendId, ts)
-      case UserCreated(user, friendid, ts) => KFriendAdded(user, friendid, ts)
+      case UserCreated(user, friendid, ts) => KUserCreated(user, friendid, ts)
     }
   }
 }
