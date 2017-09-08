@@ -7,9 +7,14 @@ import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.Descriptor
 import com.lightbend.lagom.scaladsl.api.Service
 import com.lightbend.lagom.scaladsl.api.ServiceCall
+import com.lightbend.lagom.scaladsl.api.broker.Topic
+import com.lightbend.lagom.scaladsl.api.broker.kafka.{KafkaProperties, PartitionKeyStrategy}
 
 import scala.collection.immutable.Seq
 
+object FriendService  {
+  val TOPIC_NAME = "friends"
+}
 
 /**
  * The friend service.
@@ -46,6 +51,9 @@ trait FriendService extends Service {
    */
   def getFollowers(userId: String): ServiceCall[NotUsed, Seq[String]]
 
+  //added wrt message api
+  def friendsTopic: Topic[KFriendMessage]
+
   override def descriptor(): Descriptor = {
     import Service._
 
@@ -54,6 +62,12 @@ trait FriendService extends Service {
         namedCall("/api/users", createUser),
         pathCall("/api/users/:userId/friends", addFriend _),
         pathCall("/api/users/:id/followers", getFollowers _)
+      ).withTopics(
+          topic(FriendService.TOPIC_NAME, friendsTopic)
+            .addProperty(
+              KafkaProperties.partitionKeyStrategy,
+              PartitionKeyStrategy[KFriendMessage](_ => "")
+            )
       ).withAutoAcl(true)
 
   }

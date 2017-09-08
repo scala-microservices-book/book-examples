@@ -7,9 +7,10 @@ import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.NotFound
-import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
+import com.lightbend.lagom.scaladsl.broker.TopicProducer
+import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentEntityRegistry}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraReadSide
-import sample.chirper.friend.api.{CreateUser, FriendId, FriendService, User}
+import sample.chirper.friend.api._
 
 import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext
@@ -17,7 +18,7 @@ import scala.concurrent.ExecutionContext
 class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,
                         db: CassandraSession)(implicit ec: ExecutionContext) extends FriendService {
 
- override def getUser(id: String): ServiceCall[NotUsed, User] = {
+  override def getUser(id: String): ServiceCall[NotUsed, User] = {
     request =>
       friendEntityRef(id).ask(GetUser())
         .map(_.user.getOrElse(throw NotFound(s"user $id not found")))
@@ -25,7 +26,7 @@ class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,
 
   override def createUser(): ServiceCall[CreateUser, Done] = {
     request =>
-        friendEntityRef(request.userId).ask(CreateUserCommand(User(request)))
+      friendEntityRef(request.userId).ask(CreateUserCommand(User(request)))
   }
 
   override def addFriend(userId: String): ServiceCall[FriendId, Done] = {
@@ -34,8 +35,7 @@ class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,
   }
 
   override def getFollowers(id: String): ServiceCall[NotUsed, Seq[String]] = {
-    req =>
-    {
+    req => {
       db.selectAll("SELECT * FROM follower WHERE userId = ?", id).map { jrows =>
         val rows = jrows.toVector
         rows.map(_.getString("followedBy"))
@@ -46,4 +46,17 @@ class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,
 
   private def friendEntityRef(userId: String) =
     persistentEntities.refFor[FriendEntity](userId)
+
+  override def friendsTopic = TopicProducer.singleStreamWithOffset[KFriendMessage] {
+    fromOffset =>
+      persistentEntities.eventStream(FriendEvent.Tag, fromOffset)
+        .map(ev => (convertEvent(ev), ev.offset))
+  }
+
+  def convertEvent(helloEvent: EventStreamElement[FriendEvent]): KFriendMessage = {
+    helloEvent.event match {
+      case FriendAdded(user, friendId, ts) => KFriendAdded(user, friendId, ts)
+      case UserCreated(user, friendid, ts) => KFriendAdded(user, friendid, ts)
+    }
+  }
 }

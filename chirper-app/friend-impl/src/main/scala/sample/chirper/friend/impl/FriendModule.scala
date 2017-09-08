@@ -4,6 +4,7 @@
 package sample.chirper.friend.impl
 
 
+import com.lightbend.lagom.scaladsl.broker.kafka.LagomKafkaComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegistry}
@@ -18,6 +19,7 @@ abstract class FriendModule (context: LagomApplicationContext)
   extends LagomApplication(context)
     with AhcWSComponents
   with CassandraPersistenceComponents
+  with LagomKafkaComponents
 {
 
   persistentEntityRegistry.register(wire[FriendEntity])

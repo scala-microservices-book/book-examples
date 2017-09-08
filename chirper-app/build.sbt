@@ -18,6 +18,7 @@ lazy val friendImpl = project("friend-impl")
       lagomScaladslTestKit,
       lagomScaladslPersistenceCassandra,
       "com.datastax.cassandra" % "cassandra-driver-extras" % "3.0.0",
+      lagomScaladslKafkaBroker,
       macwire
     )
   )
@@ -64,6 +65,25 @@ lazy val activityStreamImpl = project("activity-stream-impl")
   )
   .dependsOn(activityStreamApi, chirpApi, friendApi)
 
+lazy val friendRecommendationApi = project("friend-recommendation-api")
+  .settings(
+    version := "1.0-SNAPSHOT",
+    libraryDependencies += lagomScaladslApi
+  )
+
+lazy val friendRecommendationImpl = project("friend-recommendation-impl")
+  .enablePlugins(LagomScala)
+  .settings(
+    version := "1.0-SNAPSHOT",
+    libraryDependencies ++= Seq(
+      lagomScaladslTestKit,
+      lagomScaladslKafkaClient,
+      macwire
+    )
+  )
+  .dependsOn(friendRecommendationApi, friendApi)
+
+
 lazy val frontEnd = project("front-end")
   .enablePlugins(PlayScala, LagomPlay)
   .settings(
@@ -99,4 +119,4 @@ lagomCassandraCleanOnStart in ThisBuild := false
 
 lagomCassandraPort in ThisBuild := 4042
 
-lagomKafkaEnabled in ThisBuild := false
+lagomKafkaEnabled in ThisBuild := true
