@@ -14,7 +14,7 @@ import sample.chirper.friend.api.{CreateUser, FriendId, FriendService, User}
 import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext
 
-class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,  readSide: CassandraReadSide,
+class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,
                         db: CassandraSession)(implicit ec: ExecutionContext) extends FriendService {
 
  override def getUser(id: String): ServiceCall[NotUsed, User] = {

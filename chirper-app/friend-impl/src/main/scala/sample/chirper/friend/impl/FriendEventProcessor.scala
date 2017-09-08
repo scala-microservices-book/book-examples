@@ -4,25 +4,17 @@ package sample.chirper.friend.impl
 import java.util.UUID
 
 import akka.Done
-import com.datastax.driver.core.PreparedStatement
-import com.lightbend.lagom.scaladsl.persistence.ReadSideProcessor
-import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, CassandraSession}
 
-import scala.concurrent.ExecutionContext
+import com.datastax.driver.core.PreparedStatement
+import com.lightbend.lagom.scaladsl.persistence.{AggregateEventTag, EventStreamElement, ReadSideProcessor}
+import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, CassandraSession}
+import scala.concurrent.{ExecutionContext, Future}
 
 class FriendEventProcessor(session: CassandraSession, readSide: CassandraReadSide)(implicit ec: ExecutionContext)
   extends ReadSideProcessor[FriendEvent] {
 
-  // Needed to convert some Scala types to Java
-
   @volatile private var writeFollowers: PreparedStatement = null // initialized in prepare
   @volatile private var writeOffset: PreparedStatement = null // initialized in prepare
-
-  private def setWriteFollowers(writeFollowers: PreparedStatement): Unit =
-    this.writeFollowers = writeFollowers
-
-  private def setWriteOffset(writeOffset: PreparedStatement): Unit =
-    this.writeOffset = writeOffset
 
 
   def prepare(session: CassandraSession) = {
@@ -34,7 +26,6 @@ class FriendEventProcessor(session: CassandraSession, readSide: CassandraReadSid
   }
 
   private def prepareCreateTables(session: CassandraSession) = {
-
     for {
       _ <- session.executeCreateTable(
         """CREATE TABLE IF NOT EXISTS follower (
@@ -51,7 +42,7 @@ class FriendEventProcessor(session: CassandraSession, readSide: CassandraReadSid
   private def prepareWriteFollowers(session: CassandraSession) = {
     val statement = session.prepare("INSERT INTO follower (userId, followedBy) VALUES (?, ?)")
     statement.map(ps => {
-      setWriteFollowers(ps)
+      this.writeFollowers = ps
       Done
     })
   }
@@ -59,7 +50,7 @@ class FriendEventProcessor(session: CassandraSession, readSide: CassandraReadSid
   private def prepareWriteOffset(session: CassandraSession) = {
     val statement = session.prepare("INSERT INTO friend_offset (partition, offset) VALUES (1, ?)")
     statement.map(ps => {
-      setWriteOffset(ps)
+      this.writeOffset = ps
       Done
     })
   }
@@ -73,24 +64,22 @@ class FriendEventProcessor(session: CassandraSession, readSide: CassandraReadSid
 //    builder.setEventHandler(classOf[FriendAdded], processFriendChanged)
 //    builder.build()
 //  }
-//
-//  private def processFriendChanged(event: FriendAdded, offset: UUID) = {
-//    val bindWriteFollowers = writeFollowers.bind()
-//    bindWriteFollowers.setString("userId", event.friendId)
-//    bindWriteFollowers.setString("followedBy", event.userId)
-//    val bindWriteOffset = writeOffset.bind(offset)
-//    completedStatements(Seq(bindWriteFollowers, bindWriteOffset))
-//  }
-//
+
+  private def processFriendChanged(event: FriendAdded, offset: UUID) = {
+    val bindWriteFollowers = writeFollowers.bind()
+    bindWriteFollowers.setString("userId", event.friendId)
+    bindWriteFollowers.setString("followedBy", event.userId)
+    val bindWriteOffset = writeOffset.bind(offset)
+    Future.successful(List(bindWriteFollowers, bindWriteOffset))
+  }
+
+
   override def buildHandler() = {
-//  readSide.builder[FriendEvent]("itemEventOffset")
-//    .setGlobalPrepare(createTables)
-//    .setPrepare(_ => prepare())
-//    .setEventHandler[FriendEvent](e => insertItem(e.event.item))
-//    .setEventHandler[AuctionStarted](e => updateItemSummaryStatus(e.entityId, api.ItemStatus.Auction))
-//    .setEventHandler[AuctionFinished](e => updateItemSummaryStatus(e.entityId, api.ItemStatus.Completed))
-//    .build
-  ???
+  readSide.builder[FriendEvent]("friendEventOffset")
+    .setGlobalPrepare(() => prepareCreateTables(session))
+    .setPrepare(_ => prepareWriteFollowers(session))
+    .setEventHandler[FriendAdded]((e: EventStreamElement[FriendAdded]) => processFriendChanged(e.event, UUID.fromString(e.entityId)))
+      .build()
 }
 
   override def aggregateTags = Set(FriendEvent.Tag)
