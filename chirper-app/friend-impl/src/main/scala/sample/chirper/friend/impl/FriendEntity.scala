@@ -2,6 +2,7 @@ package sample.chirper.friend.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity
+import sample.chirper.friend.api.User
 
 class FriendEntity extends PersistentEntity {
   override type Command = FriendCommand
@@ -11,7 +12,8 @@ class FriendEntity extends PersistentEntity {
   override def initialState: FriendState = FriendState(None)
 
   override def behavior = {
-    case FriendState(None) => userNotCreated
+    case FriendState(None) =>
+      userNotCreated
 
     case FriendState(Some(x)) =>
       Actions()
@@ -32,19 +34,25 @@ class FriendEntity extends PersistentEntity {
     Actions()
       .onCommand[CreateUserCommand, Done] {
       case (CreateUserCommand(user), ctx, state) =>
-        ctx.thenPersist(UserCreated(user.userId, user.name))(x => ctx.reply(Done))
+        ctx.thenPersist(UserCreated(user.userId, user.name)){_ =>
+          ctx.reply(Done)
+        }
+    }.onReadOnlyCommand[GetUser, GetUserReply]{
+      case (GetUser(), ctx, state) =>
+        ctx.reply(GetUserReply(None))
     }
       .onEvent {
-        case (UserCreated(userId, name, ts), state) => state
+        case (UserCreated(userId, name, ts), state) => FriendState(User(userId, name, List()))
       }
   }
 
   val addFriend = {
     Actions().onCommand[AddFriend, Done] {
       case (AddFriend(id), ctx, FriendState(None)) =>
-        ctx.invalidCommand(s"User $entityId is not  created")
+        ctx.invalidCommand(s"User $entityId is not yet created")
         ctx.done
       case (AddFriend(id), ctx, FriendState(Some(user))) if user.friends.contains(id) =>
+        //user already had the requested command as a friend
         ctx.reply(Done)
         ctx.done
       case (AddFriend(friendUserId), ctx, FriendState(Some(user))) =>
