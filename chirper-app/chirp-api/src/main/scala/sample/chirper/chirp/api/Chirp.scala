@@ -6,11 +6,10 @@ package sample.chirper.chirp.api
 import java.time.Instant
 import java.util.UUID
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads} // Combinator syntax
 
-case class Chirp (userId: String, message: String, @JsonIgnore timestamp: Instant,@JsonIgnore uuid: String) {
+case class Chirp (userId: String, message: String,timestamp: Instant, uuid: String) {
   def this(userId: String, message: String) =
     this(userId, message, Chirp.defaultTimestamp, Chirp.defaultUUID)
 }

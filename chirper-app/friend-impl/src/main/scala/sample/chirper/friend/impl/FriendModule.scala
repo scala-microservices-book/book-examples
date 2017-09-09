@@ -23,7 +23,7 @@ abstract class FriendModule (context: LagomApplicationContext)
 {
 
   persistentEntityRegistry.register(wire[FriendEntity])
-  readSide.register(wire[FriendEventProcessor])
+//  readSide.register(wire[FriendEventProcessor])
   override def jsonSerializerRegistry = FriendSerializerRegistry
 
   override lazy val lagomServer: LagomServer = serverFor[FriendService](wire[FriendServiceImpl])

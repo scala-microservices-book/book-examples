@@ -59,8 +59,8 @@ class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,
 
   def convertEvent(helloEvent: EventStreamElement[FriendEvent]): KFriendMessage = {
     helloEvent.event match {
-      case FriendAdded(user, friendId, ts) => KFriendAdded(user, friendId, ts)
-      case UserCreated(user, friendid, ts) => KUserCreated(user, friendid, ts)
+      case UserCreated(userId, name, ts) => KUserCreated(userId, name, ts)
+      case FriendAdded(userId, friendId, ts) => KFriendAdded(userId, friendId, ts)
     }
   }
 }
