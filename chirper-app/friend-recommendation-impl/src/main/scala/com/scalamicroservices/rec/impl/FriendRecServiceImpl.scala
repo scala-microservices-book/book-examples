@@ -39,12 +39,16 @@ class FriendRecServiceImpl(friendService: FriendService)(implicit ex: ExecutionC
 
   override def getFriendRecommendation(userId: String) = {
     request =>
-      import scala.collection.JavaConversions._
-      val ans = allFriends.filter(all => all.userId == userId)
+      val ans = getFriends(userId)
         .flatMap(firstLevelFriend => {
-          allFriends.filter(all => firstLevelFriend.friendId == all.userId &&
-            firstLevelFriend.friendId != userId)//it should not recommend itself
-        }).toList
-      Future.successful(ans.map(x => x.userId))
+          getFriends(firstLevelFriend)
+        })
+          .filter(ans => ans != userId) //so that it does not recommend itself
+      Future.successful(ans)
+  }
+
+  private def getFriends(userId: String): Seq[String] ={
+    import scala.collection.JavaConversions._
+    allFriends.filter(all => all.userId == userId).map(x => x.friendId).toList
   }
 }

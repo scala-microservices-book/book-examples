@@ -30,7 +30,7 @@ class ActivityStreamApplicationLoader extends LagomApplicationLoader {
   //    new FriendModule(context) with ConductRApplicationComponents
     new ActivityStreamModule(context) with LagomDevModeComponents
 
-  override def describeService = Some(readDescriptor[FriendService])
+  override def describeService = Some(readDescriptor[ActivityStreamService])
 }
 
 

@@ -25,5 +25,5 @@ class FriendRecApplicationLoader extends LagomApplicationLoader {
   override def loadDevMode(context: LagomApplicationContext): LagomApplication =
     new FriendRecModule(context) with LagomDevModeComponents
 
-  override def describeService = Some(readDescriptor[FriendService])
+  override def describeService = Some(readDescriptor[FriendRecService])
 }

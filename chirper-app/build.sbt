@@ -115,7 +115,7 @@ licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses
 lagomCassandraEnabled in ThisBuild := true
 
 // do not delete database files on start
-lagomCassandraCleanOnStart in ThisBuild := true
+lagomCassandraCleanOnStart in ThisBuild := false
 
 lagomCassandraPort in ThisBuild := 4042
 
