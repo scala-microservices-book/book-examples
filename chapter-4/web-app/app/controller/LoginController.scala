@@ -5,24 +5,26 @@ import javax.inject.{Inject, Singleton}
 import com.microservices.auth._
 import play.api.data.Forms._
 import play.api.data._
-import play.api.libs.json.{JsError, JsSuccess, Json}
+import play.api.libs.json.{JsError, JsSuccess}
+import play.api.libs.ws.JsonBodyWritables._
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import utils.AllProperties
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class LoginController @Inject()(cc: ControllerComponents, config: AllProperties, ws: WSClient)(implicit val ec: ExecutionContext) extends AbstractController(cc) {
 
   def status = Action { request =>
     //TODO base on token
-    Ok(ResponseObj.asSuccess("success"))
-//    request.session.get("email").map { email =>
-//      Ok(ResponseObj.asSuccess("success"))
-//    }.getOrElse {
-//      Unauthorized(ResponseObj.asFailure("Oops, you are not connected"))
-//    }
+    request.session.get("email").map { email =>
+      Ok(ResponseObj.asSuccess("success"))
+    }.getOrElse {
+      Unauthorized(ResponseObj.asFailure("Oops, you are not connected"))
+        .withSession("email" -> "test.com")
+
+    }
   }
 
 
@@ -76,9 +78,9 @@ class LoginController @Inject()(cc: ControllerComponents, config: AllProperties,
       }
   }
 
+
   def logout = Action {
     // Delete session entry for request SID
-    Ok(Json.parse("{\"message\":\"success\"}")).withNewSession
-    //    Ok(Json.parse("{\"message\":\"success\"}"))
+    Ok(ResponseObj.asSuccess("success")).withNewSession
   }
 }

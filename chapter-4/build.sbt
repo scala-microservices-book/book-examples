@@ -25,7 +25,7 @@ lazy val commons = BaseProject("commons")
 
 
 lazy val `web-app` = PlayProject("web-app")
-  .settings(libraryDependencies ++= Seq(parserCombinator, ws, specs2 % Test, guice))
+  .settings(libraryDependencies ++= Seq(parserCombinator, ws, specs2 % Test, guice, scalaTest))
   .dependsOn(commons)
 
 lazy val `so-app` = PlayProject("so-app")
@@ -69,7 +69,9 @@ val playSlickEvolutions = "com.typesafe.play" %% "play-slick-evolutions" % playS
 val jbcrypt = "org.mindrot" % "jbcrypt" % jbcryptV
 val parserCombinator = "org.scala-lang.modules" % "scala-parser-combinators_2.12" % parserCombinatorV
 val playJson = "com.typesafe.play" %% "play-json" % "2.6.3"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 val runAll = inputKey[Unit]("Runs all subprojects")
+
 
 runAll := {
   (run in Compile in `web-app`).partialInput(" 3000").evaluated
