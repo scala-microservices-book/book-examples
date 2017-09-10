@@ -4,7 +4,7 @@ import javax.inject.Singleton
 
 import com.google.inject.Inject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import slick.driver.JdbcProfile
+import slick.jdbc.JdbcProfile
 import slick.jdbc.GetResult
 import users.{SOTag, SOUser, SoUserScore}
 
@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class SearchDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
 
-  import driver.api._
+  import profile.api._
 
   implicit val getUserResult: GetResult[(SOUser, SOTag, Int)] = GetResult(r =>
     (SOUser(r.nextInt(), r.nextString(), r.nextInt(), r.nextString(), r.nextString(), r.nextString()),

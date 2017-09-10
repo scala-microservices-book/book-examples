@@ -11,10 +11,26 @@ import utils.Contexts
 import scala.concurrent.Future
 
 @Singleton
-class UserController @Inject()(userService: UserService, contexts: Contexts, tokenService: TokenService) extends Controller {
+class UserController @Inject()(userService: UserService, contexts: Contexts, tokenService: TokenService, cc: ControllerComponents) extends AbstractController(cc) {
 
   implicit val executionContext = contexts.cpuLookup
 
+  /**
+    * Function to register a new user created.
+    *
+    * Expects a json corresponding to the `com.microservices.auth.User` object in the request body. It creates a token and responds
+    * the token to the caller.
+    */
+  /*
+  Example call:
+  curl -X POST \
+    http://localhost:5001/v1/auth/register \
+    -H 'content-type: application/json' \
+    -d '{
+	    "email":"p@p.com",
+	    "password":"abcd"
+    }'
+   */
   def register = Action.async(parse.json) { implicit request =>
     request.body.validate[User].fold(
       error => Future.successful(BadRequest("Not a valid input format: " + error.mkString)),

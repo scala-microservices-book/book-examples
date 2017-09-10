@@ -4,7 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import com.microservices.auth.{Token, TokenStr}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import slick.driver.JdbcProfile
+import slick.jdbc.JdbcProfile
 import slick.jdbc.GetResult
 import utils.Contexts
 

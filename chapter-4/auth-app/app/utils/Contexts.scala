@@ -10,5 +10,5 @@ class Contexts @Inject()(akkaSystem: ActorSystem, configuration: play.api.Config
   implicit val dbLookup = akkaSystem.dispatchers.lookup("contexts.db-lookups")
   implicit val cpuLookup = akkaSystem.dispatchers.lookup("contexts.cpu-operations")
 
-  val tokenTTL = configuration.getLong("token.ttl").get
+  val tokenTTL = configuration.get[Long]("token.ttl")
 }

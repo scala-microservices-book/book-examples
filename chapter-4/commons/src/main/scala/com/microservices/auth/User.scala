@@ -1,7 +1,5 @@
 package com.microservices.auth
 
-
-
 import play.api.libs.json._
 
 
