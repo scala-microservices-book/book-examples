@@ -11,11 +11,31 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TokenService @Inject()(context: Contexts, tokensDao: TokenDao) {
+  /**
+    * Creates a token based on the key provided. If there was already a token generated for the key and is valid, then the same token is returned
+    * Else a new token is generated and returned
+    * @param key key for example user email
+    * @return
+    */
   def createToken(key: String)(implicit exec:ExecutionContext): Future[Token] = {
-    val token = generateToken(key)
-    tokensDao.createToken(token).map(_ => token)
+    tokensDao.getTokenFromkey(key).flatMap {
+      case Some(token) =>
+        if(token.validTill <= System.currentTimeMillis()){
+          dropToken(token.token)
+          val newToken: Token = generateToken(key)
+          tokensDao.createToken(newToken).map(_ => newToken)
+        } else{
+          Future(token)
+        }
+      case None =>
+        val newToken = generateToken(key)
+        tokensDao.createToken(newToken).map(_ => newToken)
+    }
   }
 
+  /**
+    * verifies if its a valid token. Returns a future completed with token if so. Else the returned future completes with an exception
+    */
   def authenticateToken(token: TokenStr, refresh:Boolean)(implicit exec:ExecutionContext): Future[Token] = {
     tokensDao.getToken(token.tokenStr).map{
       case Some(t) =>

@@ -49,11 +49,11 @@ export default class IndexPage extends React.Component {
       <div className="home">
         <div style={loginForm}>
           <Form loading={this.state.loading}>
-		    <Form.Input label='Email' ref='email' placeholder='joe@schmoe.com' />
+		    <Form.Input label='Email' ref='email' placeholder='test@test.com' />
 		    <br/>
           	<Form.Field>
 			  <label>Password</label>
-			  <Input ref='password' type='password' />
+			  <Input ref='password' type='password' placeholder='test'/>
 			</Form.Field>		    
 		  </Form>
       <br/>
@@ -68,7 +68,7 @@ export default class IndexPage extends React.Component {
   	this.setState({
   		loading:'loading'
   	});
-  	return fetch(this.hostname+"/api/login",{
+  	return fetch(this.hostname+"/api/register",{
   		method:'POST',
       credentials:'same-origin',
   		headers: {'Content-Type':'application/x-www-form-urlencoded'}, // this line is important, if this content-type is not set it wont work

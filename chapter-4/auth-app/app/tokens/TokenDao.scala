@@ -14,13 +14,17 @@ import scala.concurrent.Future
 class TokenDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, contexts: Contexts) extends HasDatabaseConfigProvider[JdbcProfile] {
   implicit val executionContext = contexts.cpuLookup
 
-  import driver.api._
+  import profile.api._
 
   implicit val getTokenResult = GetResult(r => Token(TokenStr(r.nextString), r.nextLong(), r.nextString))
 
 
   def getToken(token:String): Future[Option[Token]] = {
     db.run(sql"select token, validTill,key from tokens where token = $token".as[Token].headOption)
+  }
+
+  def getTokenFromkey(key:String): Future[Option[Token]] = {
+    db.run(sql"select token, validTill,key from tokens where key = $key".as[Token].headOption)
   }
 
   def createToken(token:Token): Future[Int] = {
