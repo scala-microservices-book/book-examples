@@ -34,6 +34,22 @@ function getUser(userId) {
     );
 }
 
+function getFriendRecommendations(userId){
+    return $.ajax({
+        url: "/api/friends/rec/" + userId,
+        type: "GET"
+    }).then(
+        function(friends) {
+            console.log(friends);
+            return friends;
+        },
+        function() {
+            return $.when(null);
+        }
+    );
+}
+
+
 var Chirp = React.createClass({
     render: function() {
         return (
@@ -240,6 +256,31 @@ var AddFriendPage = React.createClass({
         );
     }
 });
+
+//TODO
+var FriendRecommendation = React.createClass({
+    getInitialState: function() {
+        return {friendId: ""};
+    },
+    handleFriendIdChange: function(e) {
+        this.setState({friendId: e.target.value});
+    },
+    render: function() {
+        console.log("friends -->");
+        var users = getFriendRecommendations(localStorage.userId);
+        console.log(users);
+        return (
+            <ContentLayout subtitle="Friend Recommendations">
+                <Section>
+                    <div className="small-12 columns">
+                    </div>
+                </Section>
+            </ContentLayout>
+        );
+    }
+});
+
+
 
 var ActivityStream = React.createClass({
     getInitialState: function() {
@@ -451,6 +492,7 @@ var PageLayout = React.createClass({
                 <div className="tertiary-nav">
                     <Link to="/addFriend">Add Friend</Link>,
                     <Link to="/">Feed</Link>,
+                    <Link to="/friendRecommendations">Friend Recommendations</Link>,
                     <Link to={"/users/" + this.props.user.userId }>{this.props.user.name}</Link>
                 </div>
             );
@@ -559,6 +601,7 @@ ReactDOM.render(
             <IndexRoute component={ActivityStream}/>
             <Route path="/users/:userId" component={UserChirps}/>
             <Route path="/addFriend" component={AddFriendPage}/>
+            <Route path="/friendRecommendations" component={FriendRecommendation}/>
         </Route>
     </ReactRouter.Router>,
     document.getElementById("content")
