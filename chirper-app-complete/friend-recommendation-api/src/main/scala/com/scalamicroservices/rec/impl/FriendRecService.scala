@@ -12,6 +12,6 @@ trait FriendRecService extends Service{
 
     named("friendRecService").withCalls(
       pathCall("/api/friends/rec/:id", getFriendRecommendation _)
-    )
+    ).withAutoAcl(true)
   }
 }
