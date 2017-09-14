@@ -9,5 +9,5 @@ This repository has all the code examples for the scala microservices book divid
 
 ## Feedback and Bugs
 
-please email bugs@scalamicroservices.com
+please email purijatin@**ail.com
 
