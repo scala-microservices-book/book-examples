@@ -50,9 +50,6 @@ class FriendEntity extends PersistentEntity {
 
   val addFriend = {
     Actions().onCommand[AddFriend, Done] {
-      case (AddFriend(id), ctx, FriendState(None)) =>
-        ctx.invalidCommand(s"User $entityId is not yet created")
-        ctx.done
       case (AddFriend(id), ctx, FriendState(Some(user))) if user.friends.contains(id) =>
         //user already had the requested command as a friend
         ctx.reply(Done)
