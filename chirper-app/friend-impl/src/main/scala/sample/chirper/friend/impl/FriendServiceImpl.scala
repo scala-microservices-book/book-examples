@@ -3,12 +3,11 @@
  */
 package sample.chirper.friend.impl
 
-import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.NotFound
-import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
-import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraReadSide
+import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
+import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRef, PersistentEntityRegistry}
 import sample.chirper.friend.api.{CreateUser, FriendId, FriendService, User}
 
 import scala.collection.immutable.Seq
@@ -44,6 +43,6 @@ class FriendServiceImpl(persistentEntities: PersistentEntityRegistry,
   }
 
 
-  private def friendEntityRef(userId: String) =
+  private def friendEntityRef(userId: String): PersistentEntityRef[FriendCommand] =
     persistentEntities.refFor[FriendEntity](userId)
 }
