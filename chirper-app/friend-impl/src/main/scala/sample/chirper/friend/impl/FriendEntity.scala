@@ -11,7 +11,7 @@ class FriendEntity extends PersistentEntity {
 
   override def initialState: FriendState = FriendState(None)
 
-  override def behavior = {
+  override def behavior: ((FriendState) => Actions) = {
     case FriendState(None) =>
       userNotCreated
 
@@ -22,7 +22,8 @@ class FriendEntity extends PersistentEntity {
           ctx.invalidCommand(s"User $x is already created")
           ctx.done
       }
-        .orElse(addFriend).orElse(getUserCommand)
+        .orElse(addFriend)
+        .orElse(getUserCommand)
   }
 
   private val getUserCommand = Actions().onReadOnlyCommand[GetUser, GetUserReply] {
@@ -34,16 +35,17 @@ class FriendEntity extends PersistentEntity {
     Actions()
       .onCommand[CreateUserCommand, Done] {
       case (CreateUserCommand(user), ctx, state) =>
-        ctx.thenPersist(UserCreated(user.userId, user.name)){_ =>
+        val event = UserCreated(user.userId, user.name)
+        ctx.thenPersist(event) { _ =>
           ctx.reply(Done)
         }
-    }.onReadOnlyCommand[GetUser, GetUserReply]{
+    }.onEvent {
+      case (UserCreated(userId, name, ts), state) => FriendState(User(userId, name, List()))
+    }
+      .onReadOnlyCommand[GetUser, GetUserReply] {
       case (GetUser(), ctx, state) =>
         ctx.reply(GetUserReply(None))
     }
-      .onEvent {
-        case (UserCreated(userId, name, ts), state) => FriendState(User(userId, name, List()))
-      }
   }
 
   val addFriend = {
