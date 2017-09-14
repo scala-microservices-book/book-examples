@@ -1,3 +1,5 @@
+name := "chirper-app-complete"
+
 organization in ThisBuild := "sample.chirper"
 
 scalaVersion in ThisBuild := "2.11.8"
@@ -16,6 +18,9 @@ lazy val friendImpl = project("friend-impl")
     version := "1.0-SNAPSHOT",
     libraryDependencies ++= Seq(
       lagomScaladslTestKit,
+      lagomScaladslPersistenceCassandra,
+      "com.datastax.cassandra" % "cassandra-driver-extras" % "3.0.0",
+      lagomScaladslKafkaBroker,
       macwire
     )
   )
@@ -37,6 +42,7 @@ lazy val chirpImpl = project("chirp-impl")
     libraryDependencies ++= Seq(
       lagomScaladslPubSub,
       lagomScaladslTestKit,
+      lagomScaladslPersistenceCassandra,
       macwire
     )
   )
@@ -60,6 +66,25 @@ lazy val activityStreamImpl = project("activity-stream-impl")
     )
   )
   .dependsOn(activityStreamApi, chirpApi, friendApi)
+
+lazy val friendRecommendationApi = project("friend-recommendation-api")
+  .settings(
+    version := "1.0-SNAPSHOT",
+    libraryDependencies += lagomScaladslApi
+  )
+
+lazy val friendRecommendationImpl = project("friend-recommendation-impl")
+  .enablePlugins(LagomScala)
+  .settings(
+    version := "1.0-SNAPSHOT",
+    libraryDependencies ++= Seq(
+      lagomScaladslTestKit,
+      lagomScaladslKafkaClient,
+      macwire
+    )
+  )
+  .dependsOn(friendRecommendationApi, friendApi)
+
 
 lazy val frontEnd = project("front-end")
   .enablePlugins(PlayScala, LagomPlay)
@@ -89,6 +114,11 @@ def project(id: String) = Project(id, base = file(id))
 
 licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
 
-lagomCassandraEnabled in ThisBuild := false
+lagomCassandraEnabled in ThisBuild := true
 
-lagomKafkaEnabled in ThisBuild := false
+// do not delete database files on start
+lagomCassandraCleanOnStart in ThisBuild := false
+
+lagomCassandraPort in ThisBuild := 4042
+
+lagomKafkaEnabled in ThisBuild := true
