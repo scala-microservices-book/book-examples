@@ -3,7 +3,7 @@ This is built on top of the exising [lagom-scala-chirper](https://github.com/dot
 * It uses the scaladsl api instead of javadsl from scala
 * For the sake of learning. The code is bare minimum and only uses Lagom service api related concepts. Which means it:
   * It does not use the Persistence API. All the data is simply stored on-memory using Map
-  * It neither relies on Apache Kafka
+  * It neither uses the Message Broker API
 
 Like it says: bare minimum
 
