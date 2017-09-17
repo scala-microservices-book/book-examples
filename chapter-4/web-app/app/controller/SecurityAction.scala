@@ -11,7 +11,7 @@ import utils.AllProperties
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  *
+  * This class does authentication based on the session.
   */
 class SecurityAction @Inject()(parser: BodyParsers.Default, config: AllProperties, ws: WSClient)
                               (implicit ec: ExecutionContext) extends ActionBuilderImpl(parser) {
@@ -30,9 +30,9 @@ class SecurityAction @Inject()(parser: BodyParsers.Default, config: AllPropertie
               Future.successful(Results.BadRequest(ResponseObj.asFailure(e.getMessage)))
           }
       case None =>
-//        Logger.info("Not logged in. Please login")
-//        Future.successful(Results.BadRequest(ResponseObj.asFailure(s"Not logged in. Please login")))
-        block(request)
+        Logger.info("Not logged in. Please login")
+        Future.successful(Results.BadRequest(ResponseObj.asFailure(s"Not logged in. Please login")))
+//        block(request)
     }
   }
 }
