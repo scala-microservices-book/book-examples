@@ -1,2 +1,2 @@
-POST        /so/v1/search         controllers.SearchController.searchPost
-GET         /so/v1/search/        controllers.SearchController.searchGet(location:String, tag:String)
+POST        /so/v1/search         controllers.SOSearchController.searchPost
+GET         /so/v1/search        controllers.SOSearchController.searchGet(location:String, tag:String)

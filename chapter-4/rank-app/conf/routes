@@ -1,0 +1,2 @@
+GET         /api/v1/search       controller.RankController.search(location: Option[String], tag: Option[String])
+POST        /api/v1/search       controller.RankController.searchByQuery

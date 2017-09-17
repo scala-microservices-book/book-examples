@@ -2,10 +2,9 @@ package service
 
 import javax.inject.{Inject, Singleton}
 
-import com.microservices.search.SearchFilter
+import com.microservices.search.{SOSearchResult, SearchFilter, SoUserScore}
 import dao.SearchDao
 import play.api.Logger
-import users.{SOSearchResult, SoUserScore}
 
 import scala.collection.immutable.{Iterable, Seq}
 import scala.concurrent.{ExecutionContext, Future}
@@ -16,7 +15,7 @@ class SearchService @Inject()(dao: SearchDao) {
   private val log = Logger(getClass)
 
   def search(filter: SearchFilter)(implicit exec: ExecutionContext): Future[Iterable[SoUserScore]] = {
-    dao.getUsers(filter.location, filter.tech)
+    dao.getUsers(filter.location, filter.tag)
   }
 
   def searchFlatten(filter: SearchFilter)(implicit exec: ExecutionContext): Future[Seq[SOSearchResult]] = {

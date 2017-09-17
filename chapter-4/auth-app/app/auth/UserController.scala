@@ -64,7 +64,6 @@ class UserController @Inject()(userService: UserService, contexts: Contexts, tok
     }'
    */
   def login = Action.async(parse.json) { implicit request =>
-    Logger.info("request received: "+request.body)
     request.body.validate[User].fold(
       error => Future.successful(BadRequest(ResponseObj.asFailure("Not a valid input format: " + error.mkString))),
       user =>

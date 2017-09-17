@@ -14,18 +14,9 @@ import utils.AllProperties
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class LoginController @Inject()(cc: ControllerComponents, config: AllProperties, ws: WSClient)(implicit val ec: ExecutionContext) extends AbstractController(cc) {
+class LoginController @Inject()(cc: ControllerComponents, config: AllProperties, ws: WSClient, security: SecurityAction)(implicit val ec: ExecutionContext) extends AbstractController(cc) {
 
-  def status = Action { request =>
-    //TODO base on token
-    request.session.get("email").map { email =>
-      Ok(ResponseObj.asSuccess("success"))
-    }.getOrElse {
-      Unauthorized(ResponseObj.asFailure("Oops, you are not connected"))
-        .withSession("email" -> "test.com")
-
-    }
-  }
+  def status = security { request => Ok(ResponseObj.asSuccess("success"))}
 
 
   case class UserData(email: String, password: String)
@@ -48,7 +39,7 @@ class LoginController @Inject()(cc: ControllerComponents, config: AllProperties,
             case s: JsSuccess[_] => s.get match {
               case SuccessRes(token: TokenStr) =>
                 Ok(ResponseObj.asSuccess(token))
-                  .withSession("email" -> body.email)
+                  .withSession("token" -> token.tokenStr)
               case FailureRes(msg) => Unauthorized(ResponseObj.asFailure("authentication failure: "+msg))
               case x => InternalServerError(ResponseObj.asFailure("internal server error. "+x))
             }
@@ -69,7 +60,7 @@ class LoginController @Inject()(cc: ControllerComponents, config: AllProperties,
             case s: JsSuccess[_] => s.get match {
               case SuccessRes(token: TokenStr) =>
                 Ok(ResponseObj.asSuccess(token))
-                  .withSession("email" -> body.email)
+                  .withSession("token" -> token.tokenStr)
               case FailureRes(msg) => Unauthorized(ResponseObj.asFailure("could not register user: "+msg))
               case x => InternalServerError(ResponseObj.asFailure("internal server error. "+x))
             }

@@ -1,6 +1,6 @@
 package parser
 
-import com.microservices.search.SearchQuery
+import com.microservices.search.SearchFilter
 
 import scala.util.parsing.combinator.RegexParsers
 
@@ -19,7 +19,7 @@ object QueryParser {
     * @param query
     * @return
     */
-  def parse(query: String): Either[String, SearchQuery] = {
+  def parse(query: String): Either[String, SearchFilter] = {
     SearchParser(query)
   }
 
@@ -40,9 +40,9 @@ object QueryParser {
     private def city = ".+".r ^^ (name => name)
 
     private def expr = (((opt(tag) <~ opt(developer)) <~ opt(in)) ~ opt(city)) ^^ (x =>
-      SearchQuery(x._1.filter(x => !x.toLowerCase().startsWith("developer")), x._2))
+      SearchFilter(x._1.filter(x => !x.toLowerCase().startsWith("developer")), x._2))
 
-    def apply(st: String): Either[String, SearchQuery] = parseAll(expr, st) match {
+    def apply(st: String): Either[String, SearchFilter] = parseAll(expr, st) match {
       case Success(ob, _) => Right(ob)
       case NoSuccess(msg, _) => Left(msg)
     }

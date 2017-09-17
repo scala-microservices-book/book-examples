@@ -3,10 +3,10 @@ package dao
 import javax.inject.Singleton
 
 import com.google.inject.Inject
+import com.microservices.search.{SOTag, SOUser, SoUserScore}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 import slick.jdbc.GetResult
-import users.{SOTag, SOUser, SoUserScore}
 
 import scala.collection.immutable.Iterable
 import scala.concurrent.{ExecutionContext, Future}

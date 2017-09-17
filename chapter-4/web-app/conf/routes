@@ -4,7 +4,7 @@ POST        /api/register        controller.LoginController.register
 GET         /api/logout          controller.LoginController.logout
 
 GET         /api/v1/search       controller.SearchController.search(location: Option[String], tag: Option[String])
-GET         /api/searchQuery     controller.SearchController.searchQuery(query:String)
+GET         /api/v1/searchQuery     controller.SearchController.searchQuery(query:String)
 GET         /dashboard           controllers.Assets.at(path="/public", file="index-static.html")
 GET        /                     controllers.Assets.at(path="/public", file="index-static.html")
 GET        /assets/*file         controllers.Assets.at(path="/public", file)

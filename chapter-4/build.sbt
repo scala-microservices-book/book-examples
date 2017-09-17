@@ -37,7 +37,7 @@ lazy val `auth-app` = PlayProject("auth-app")
   .dependsOn(commons)
 
 lazy val `rank-app` = PlayProject("rank-app")
-  .settings(libraryDependencies ++= Seq(guice))
+  .settings(libraryDependencies ++= Seq(guice, ws))
   .dependsOn(commons)
 
 lazy val `github-app` = PlayProject("github-app")
@@ -77,6 +77,7 @@ runAll := {
   (run in Compile in `web-app`).partialInput(" 3000").evaluated
   (run in Compile in `so-app`).partialInput(" 5000").evaluated
   (run in Compile in `auth-app`).partialInput(" 5001").evaluated
+  (run in Compile in `rank-app`).partialInput(" 5002").evaluated
 }
 
 fork in run := true
