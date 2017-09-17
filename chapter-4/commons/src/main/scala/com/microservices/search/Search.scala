@@ -2,7 +2,7 @@ package com.microservices.search
 
 import play.api.libs.json.Json
 
-abstract class RankResult{
+abstract class SUserResult{
   require(score >= 0 && score <= 1, s"score must be in range of [0-1]. passed: $score")
 
   /**
@@ -32,7 +32,7 @@ object SOTag{
 
 case class SoUserScore(user:SOUser, map: Map[SOTag, Int])
 
-case class SOSearchResult(override val score:Float, soTag: SOTag, soUser: SOUser) extends RankResult {
+case class SOSearchResult(override val score:Float, soTag: SOTag, soUser: SOUser) extends SUserResult {
   override val location = soUser.location
   override val tag = soTag.name
 }
