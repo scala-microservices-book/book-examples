@@ -23,7 +23,7 @@ class TokenController @Inject()(contexts: Contexts, tokenService: TokenService, 
   curl -X GET http://localhost:5001/v1/tokens/refresh/677678f7-5dc9-4236-a254-c067b0662e8c
    */
   def refreshToken(token: String) = Action.async {
-    tokenService.authenticateToken(TokenStr(token), true).map(x => Ok(ResponseObj.asSuccess(x)))
+    tokenService.authenticateToken(TokenStr(token), true).map(x => Ok(Json.toJson(x)))
   }
 
   /**
@@ -41,7 +41,7 @@ class TokenController @Inject()(contexts: Contexts, tokenService: TokenService, 
     tokenService.authenticateToken(TokenStr(token), true)
       .map((x: Token) => Ok(Json.toJson(x)))
       .recoverWith {
-        case e: Exception => Future.successful(BadRequest(ResponseObj.asFailure(e.getMessage)))
+        case e: Exception => Future.successful(BadRequest(Json.toJson(e.getMessage)))
       }
   }
 }

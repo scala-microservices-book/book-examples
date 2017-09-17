@@ -16,8 +16,9 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class LoginController @Inject()(cc: ControllerComponents, config: AllProperties, ws: WSClient, security: SecurityAction)(implicit val ec: ExecutionContext) extends AbstractController(cc) {
 
-  def status = security { request => Ok(ResponseObj.asSuccess("success"))}
-
+  def status = security { request =>
+    Ok(ResponseObj.asSuccess("success"))
+  }
 
   case class UserData(email: String, password: String)
 
@@ -35,14 +36,11 @@ class LoginController @Inject()(cc: ControllerComponents, config: AllProperties,
       .post(User.userJS.writes(User(body.email, body.password)))
       .map {
         response =>
-          response.json.validate(ResponseObj.reads[TokenStr]) match {
-            case s: JsSuccess[_] => s.get match {
-              case SuccessRes(token: TokenStr) =>
-                Ok(ResponseObj.asSuccess(token))
-                  .withSession("token" -> token.tokenStr)
-              case FailureRes(msg) => Unauthorized(ResponseObj.asFailure("authentication failure: "+msg))
-              case x => InternalServerError(ResponseObj.asFailure("internal server error. "+x))
-            }
+          response.json.validate[TokenStr] match {
+            case s: JsSuccess[TokenStr] =>
+              val token = s.get
+              Ok(ResponseObj.asSuccess(token))
+              .withSession("token" -> token.tokenStr)
             case e: JsError => Unauthorized(ResponseObj.asFailure("authentication failure"))
           }
       }
@@ -56,14 +54,11 @@ class LoginController @Inject()(cc: ControllerComponents, config: AllProperties,
       .post(User.userJS.writes(User(body.email, body.password)))
       .map {
         response =>
-          response.json.validate(ResponseObj.reads[TokenStr]) match {
-            case s: JsSuccess[_] => s.get match {
-              case SuccessRes(token: TokenStr) =>
-                Ok(ResponseObj.asSuccess(token))
-                  .withSession("token" -> token.tokenStr)
-              case FailureRes(msg) => Unauthorized(ResponseObj.asFailure("could not register user: "+msg))
-              case x => InternalServerError(ResponseObj.asFailure("internal server error. "+x))
-            }
+          response.json.validate[TokenStr] match {
+            case s: JsSuccess[TokenStr] =>
+              val token = s.get
+              Ok(ResponseObj.asSuccess(token))
+                .withSession("token" -> token.tokenStr)
             case e: JsError => Unauthorized(ResponseObj.asFailure("could not register user"))
           }
       }

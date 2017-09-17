@@ -10,6 +10,9 @@ import utils.AllProperties
 
 import scala.concurrent.{ExecutionContext, Future}
 
+/**
+  *
+  */
 class SecurityAction @Inject()(parser: BodyParsers.Default, config: AllProperties, ws: WSClient)
                               (implicit ec: ExecutionContext) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = {
