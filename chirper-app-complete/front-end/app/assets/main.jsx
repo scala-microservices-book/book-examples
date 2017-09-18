@@ -260,26 +260,52 @@ var AddFriendPage = React.createClass({
 //TODO
 var FriendRecommendation = React.createClass({
     getInitialState: function() {
-        return {friendId: ""};
+        return {friendId: "", users: []};
     },
     handleFriendIdChange: function(e) {
         this.setState({friendId: e.target.value});
     },
-    render: function() {
-        console.log("friends -->");
-        var users = getFriendRecommendations(localStorage.userId);
-        console.log(users);
-        return (
-            <ContentLayout subtitle="Friend Recommendations">
-                <Section>
-                    <div className="small-12 columns">
+    componentDidMount: function() {
+        getFriendRecommendations(localStorage.userId).then(function(users) {
+            this.setState({
+                users: users
+            });
+        }.bind(this));
+    },
+    render: function () {
+        console.log("render-->" + this.state.users);
+        if (this.state.users.length > 0) {
+            const usersDOM = this.state.users.map(function (user) {
+                return (<div className="small-12 columns">
+                    <div className="chirp">
+                        <h3 className="chirpUser">
+                            <Link to={"/users/" + user}>
+                                {user}
+                            </Link>
+                        </h3>
+                        <hr />
                     </div>
-                </Section>
-            </ContentLayout>
-        );
+                </div>);
+            });
+            return (
+                <ContentLayout subtitle="Friend Recommendations">
+                    <Section>
+                        {usersDOM}
+                    </Section>
+                </ContentLayout>
+            );
+        } else {
+            return (
+                <ContentLayout subtitle="Friend Recommendations">
+                    <Section>
+                        No Friends to Recommend
+                    </Section>
+                </ContentLayout>
+            );
+        }
+
     }
 });
-
 
 
 var ActivityStream = React.createClass({
