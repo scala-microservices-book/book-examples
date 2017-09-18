@@ -257,7 +257,6 @@ var AddFriendPage = React.createClass({
     }
 });
 
-//TODO
 var FriendRecommendation = React.createClass({
     getInitialState: function() {
         return {friendId: "", users: []};
