@@ -273,7 +273,6 @@ var FriendRecommendation = React.createClass({
         }.bind(this));
     },
     render: function () {
-        console.log("render-->" + this.state.users);
         if (this.state.users.length > 0) {
             const usersDOM = this.state.users.map(function (user) {
                 return (<div className="small-12 columns">
