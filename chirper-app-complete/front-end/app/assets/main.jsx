@@ -34,6 +34,22 @@ function getUser(userId) {
     );
 }
 
+function getFriendRecommendations(userId){
+    return $.ajax({
+        url: "/api/friends/rec/" + userId,
+        type: "GET"
+    }).then(
+        function(friends) {
+            console.log(friends);
+            return friends;
+        },
+        function() {
+            return $.when(null);
+        }
+    );
+}
+
+
 var Chirp = React.createClass({
     render: function() {
         return (
@@ -240,6 +256,55 @@ var AddFriendPage = React.createClass({
         );
     }
 });
+
+var FriendRecommendation = React.createClass({
+    getInitialState: function() {
+        return {friendId: "", users: []};
+    },
+    handleFriendIdChange: function(e) {
+        this.setState({friendId: e.target.value});
+    },
+    componentDidMount: function() {
+        getFriendRecommendations(localStorage.userId).then(function(users) {
+            this.setState({
+                users: users
+            });
+        }.bind(this));
+    },
+    render: function () {
+        if (this.state.users.length > 0) {
+            const usersDOM = this.state.users.map(function (user) {
+                return (<div className="small-12 columns">
+                    <div className="chirp">
+                        <h3 className="chirpUser">
+                            <Link to={"/users/" + user}>
+                                {user}
+                            </Link>
+                        </h3>
+                        <hr />
+                    </div>
+                </div>);
+            });
+            return (
+                <ContentLayout subtitle="Friend Recommendations">
+                    <Section>
+                        {usersDOM}
+                    </Section>
+                </ContentLayout>
+            );
+        } else {
+            return (
+                <ContentLayout subtitle="Friend Recommendations">
+                    <Section>
+                        No Friends to Recommend
+                    </Section>
+                </ContentLayout>
+            );
+        }
+
+    }
+});
+
 
 var ActivityStream = React.createClass({
     getInitialState: function() {
@@ -451,6 +516,7 @@ var PageLayout = React.createClass({
                 <div className="tertiary-nav">
                     <Link to="/addFriend">Add Friend</Link>,
                     <Link to="/">Feed</Link>,
+                    <Link to="/friendRecommendations">Friend Recommendations</Link>,
                     <Link to={"/users/" + this.props.user.userId }>{this.props.user.name}</Link>
                 </div>
             );
@@ -559,6 +625,7 @@ ReactDOM.render(
             <IndexRoute component={ActivityStream}/>
             <Route path="/users/:userId" component={UserChirps}/>
             <Route path="/addFriend" component={AddFriendPage}/>
+            <Route path="/friendRecommendations" component={FriendRecommendation}/>
         </Route>
     </ReactRouter.Router>,
     document.getElementById("content")
