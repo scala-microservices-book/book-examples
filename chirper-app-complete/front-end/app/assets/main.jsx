@@ -274,7 +274,7 @@ var FriendRecommendation = React.createClass({
     render: function () {
         if (this.state.users.length > 0) {
             const usersDOM = this.state.users.map(function (user) {
-                return (<div className="small-12 columns">
+                return (<div className="small-12 columns" key={user}>
                     <div className="chirp">
                         <h3 className="chirpUser">
                             <Link to={"/users/" + user}>
