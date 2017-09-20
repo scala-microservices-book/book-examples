@@ -1,0 +1,10 @@
+- apt_key: url="https://download.docker.com/linux/ubuntu/gpg"
+  state=present
+- name: add deb repo
+  command: add-apt-repository "deb [arch=amd64]
+  https://download.docker.com/linux/ubuntu $(lsb_release -cs)
+  stable"
+- name: update apt
+  apt: update_cache=yes
+- name: install docker
+  apt: name=docker-ce state=present

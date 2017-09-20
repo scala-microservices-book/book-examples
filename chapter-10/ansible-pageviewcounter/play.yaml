@@ -1,0 +1,26 @@
+---
+- hosts: databases
+  vars:
+    http_port: 6379
+    remote_user: system
+  tasks: 
+    - include: db-task.yaml
+
+- hosts: dockerhosts
+  vars:
+    remote_user: system
+  tasks: 
+    - include: docker-task.yaml
+
+- hosts: webservers
+  vars:
+    http_port: 80
+    remote_user: system
+  tasks: 
+    - include: app-task.yaml
+
+- hosts: loadbalancers
+  vars:
+    remote_user: system
+  tasks: 
+    - include: lb-task.yaml

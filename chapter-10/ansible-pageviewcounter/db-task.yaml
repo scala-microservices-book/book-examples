@@ -1,0 +1,6 @@
+- name: update apt
+  apt: update_cache=yes
+- name: install redis-server
+  apt: name=redis-server state=present
+- name: start server
+  systemd: name=redis-server state=started

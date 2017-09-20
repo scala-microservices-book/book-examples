@@ -1,0 +1,5 @@
+
+- name: pull latest docker image
+  command: docker pull chartotu/pageviewcounter:latest
+- name: start docker container with redis-server url as environment variable.
+  command: docker run -d -e "REDIS_HOST={{ hostvars.databases }}" -p "{{ http_port }}:{{ http_port }}" chartotu/pageviewcounter

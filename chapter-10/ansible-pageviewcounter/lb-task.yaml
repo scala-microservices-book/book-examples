@@ -1,0 +1,13 @@
+- name: update apt
+  apt: update_cache=yes
+- name: install nginx
+  apt: name=nginx state=present
+- name: create nginx configuration template
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/pageviewcounter
+    owner: nginx
+    group: nginx
+    mode: 0644
+- name: restart nginx
+  systemd: name=nginx state=restart

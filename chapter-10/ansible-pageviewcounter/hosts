@@ -1,0 +1,8 @@
+[dockerhosts]
+localhost
+[webservers]
+localhost
+[databases]
+localhost
+[loadbalancer]
+localhost
