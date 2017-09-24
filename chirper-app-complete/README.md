@@ -9,4 +9,3 @@ Start all services using `sbt runAll`. To access the application post the startu
 * Add a friend
 * And chirp
 
-Note: You may wish to run as `sbt -mem 2G` if you find it going Out of Memory Error
