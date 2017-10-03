@@ -36,12 +36,16 @@ class LoginController @Inject()(cc: ControllerComponents, config: AllProperties,
       .post(User.userJS.writes(User(body.email, body.password)))
       .map {
         response =>
-          response.json.validate[TokenStr] match {
-            case s: JsSuccess[TokenStr] =>
-              val token = s.get
-              Ok(ResponseObj.asSuccess(token))
-              .withSession("token" -> token.tokenStr)
-            case e: JsError => Unauthorized(ResponseObj.asFailure("authentication failure"))
+          if(response.status != 200){
+            Unauthorized(ResponseObj.asFailure("authentication failure: " + response.body))
+          } else {
+            response.json.validate[TokenStr] match {
+              case s: JsSuccess[TokenStr] =>
+                val token = s.get
+                Ok(ResponseObj.asSuccess(token))
+                  .withSession("token" -> token.tokenStr)
+              case e: JsError => Unauthorized(ResponseObj.asFailure("authentication failure"))
+            }
           }
       }
   }
@@ -54,12 +58,16 @@ class LoginController @Inject()(cc: ControllerComponents, config: AllProperties,
       .post(User.userJS.writes(User(body.email, body.password)))
       .map {
         response =>
-          response.json.validate[TokenStr] match {
-            case s: JsSuccess[TokenStr] =>
-              val token = s.get
-              Ok(ResponseObj.asSuccess(token))
-                .withSession("token" -> token.tokenStr)
-            case e: JsError => Unauthorized(ResponseObj.asFailure("could not register user"))
+          if(response.status != 200){
+            Unauthorized(ResponseObj.asFailure("could not register user: " + response.body))
+          } else {
+            response.json.validate[TokenStr] match {
+              case s: JsSuccess[TokenStr] =>
+                val token = s.get
+                Ok(ResponseObj.asSuccess(token))
+                  .withSession("token" -> token.tokenStr)
+              case e: JsError => Unauthorized(ResponseObj.asFailure("could not register user"))
+            }
           }
       }
   }
