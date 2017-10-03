@@ -9,7 +9,7 @@ const loginForm = {
   margin: "auto",
 
 };
-export default class IndexPage extends React.Component {
+export default class RegisterPage extends React.Component {
   constructor(){
     super();
     this.hostname = window.location.protocol + "//" + window.location.hostname + ":"+(window.location.port);
@@ -48,22 +48,22 @@ export default class IndexPage extends React.Component {
       window.location.href= this.hostname+'/dashboard'
     }
     return (
-      <div className="home">        
+      <div className="home">
         <div style={loginForm}>
-          <Header as='h2'> Log In </Header>
-          <Form loading={this.state.loading}>
-            <Form.Input label='Email' onChange={this.updateEmailState.bind(this)} placeholder='test@test.com' />
-            <br/>
-            <Form.Field>
-              <label>Password</label>
-              <Input type='password' onChange={this.updatePasswordState.bind(this)} placeholder='test'/>
-            </Form.Field>
-          </Form>
-          <br/>
-          <Button onClick={this.sendLoginRequest.bind(this)}>Submit</Button>
+        <Header as='h2'> Register new Account </Header>
+        <Form loading={this.state.loading}>
+        <Form.Input label='Email' ref='email' onChange={this.updateEmailState.bind(this)} placeholder='test@test.com' />
+        <br/>
+        <Form.Field>
+        <label>Password</label>
+        <Input ref='password' type='password' onChange={this.updatePasswordState.bind(this)} placeholder='test'/>
+        </Form.Field>       
+        </Form>
+        <br/>
+        <Button onClick={this.sendRegisterRequest.bind(this)}>Submit</Button>
         </div>
       </div>
-      );
+    );
   }
 
   updateEmailState(e){
@@ -74,12 +74,12 @@ export default class IndexPage extends React.Component {
     this.setState({password:e.target.value});
   }
 
-  sendLoginRequest(){
-    let self = this;
+  sendRegisterRequest(){
+      let self = this;
     this.setState({
       loading:'loading'
     });
-    return fetch(this.hostname+"/api/login",{
+    return fetch(this.hostname+"/api/register",{
       method:'POST',
       credentials:'same-origin',
       headers: {'Content-Type':'application/x-www-form-urlencoded'}, // this line is important, if this content-type is not set it wont work

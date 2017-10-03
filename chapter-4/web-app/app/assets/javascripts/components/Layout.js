@@ -74,7 +74,7 @@ export default class Layout extends React.Component {
                 <div className="app-content">{this.props.children}</div>
                 <footer>
                   <p>
-                    This is a demo app to showcase  example from <strong>scala microservices</strong> book.
+                    This is a demo app to showcase  example from <strong><a href="http://scalamicroservices.com">scala microservices</a></strong> book.
                   </p>
                   </footer>
               </div>
