@@ -76,7 +76,7 @@ export default class DashboardPage extends React.Component {
 						onChange={e => this.setState({query: e.target.value }) }
 						size="massive"
 						ref="query"
-						placeholder='scala developers in hyderabad...'
+						placeholder='scala developers in singapore...'
 						/>
 						<Button secondary onClick={this.handleSearchClick.bind(this)}>Search</Button>
 					</div>
