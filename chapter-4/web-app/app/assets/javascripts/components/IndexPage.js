@@ -58,6 +58,7 @@ export default class IndexPage extends React.Component {
 					content=""
 				/>
 				<Header as='h2'> Log In </Header>
+					<Header as='h4'> <a href="/register">New User? Register here.</a> </Header>
 					<Form loading={this.state.loading}>
 						<Form.Input label='Email' onChange={this.updateEmailState.bind(this)} placeholder='test@test.com' />
 						<br/>

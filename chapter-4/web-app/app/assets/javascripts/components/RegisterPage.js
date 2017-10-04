@@ -51,6 +51,7 @@ export default class RegisterPage extends React.Component {
       <div className="home">
         <div style={loginForm}>
         <Header as='h2'> Register new Account </Header>
+        <Header as='h4'> <a href="/">Old User? Login here.</a> </Header>
         <Form loading={this.state.loading}>
         <Form.Input label='Email' ref='email' onChange={this.updateEmailState.bind(this)} placeholder='test@test.com' />
         <br/>
