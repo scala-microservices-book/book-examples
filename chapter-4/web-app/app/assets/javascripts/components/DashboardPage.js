@@ -33,7 +33,7 @@ export default class DashboardPage extends React.Component {
       
     }).then(function(body) {
       self.setState({
-        results : body
+        results : body.message
       })
     }).catch(function(err){
       self.setState({

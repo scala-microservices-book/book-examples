@@ -8,5 +8,6 @@ GET         /api/v1/searchQuery     controller.SearchController.searchQuery(quer
 GET         /dashboard           controllers.Assets.at(path="/public", file="index-static.html")
 GET         /register           controllers.Assets.at(path="/public", file="index-static.html")
 GET         /logout           controllers.Assets.at(path="/public", file="index-static.html")
+GET         /login           controllers.Assets.at(path="/public", file="index-static.html")
 GET        /                     controllers.Assets.at(path="/public", file="index-static.html")
 GET        /assets/*file         controllers.Assets.at(path="/public", file)
