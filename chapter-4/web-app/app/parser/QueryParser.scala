@@ -40,7 +40,7 @@ object QueryParser {
     private def city = ".+".r ^^ (name => name)
 
     private def expr = (((opt(tag) <~ opt(developer)) <~ opt(in)) ~ opt(city)) ^^ (x =>
-      SearchFilter(x._1.filter(x => !x.toLowerCase().startsWith("developer")), x._2))
+      SearchFilter(x._2, x._1.filter(x => !x.toLowerCase().startsWith("developer"))))
 
     def apply(st: String): Either[String, SearchFilter] = parseAll(expr, st) match {
       case Success(ob, _) => Right(ob)

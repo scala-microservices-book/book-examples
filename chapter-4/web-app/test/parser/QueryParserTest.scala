@@ -10,21 +10,21 @@ class QueryParserTest  extends FlatSpec with Matchers{
   "Query Parser" should "Scala in london" in {
     val ans = QueryParser.parse("Scala in london")
     ans.isLeft should be (false)
-    ans.right.get should be (SearchFilter(Some("Scala"), Some("london")))
+    ans.right.get should be (SearchFilter(Some("london"), Some("Scala")))
   }
 
   "Query Parser" should "Java developers in new york" in {
     val ans = QueryParser.parse("Java developers in new york")
     println(ans)
     ans.isLeft should be (false)
-    ans.right.get should be (SearchFilter(Some("Java"), Some("new york")))
+    ans.right.get should be (SearchFilter(Some("new york"), Some("Java")))
   }
 
   "Query Parser" should "Java DEVELOPERS iN new york" in {
     val ans = QueryParser.parse("Java developers in new york")
     println(ans)
     ans.isLeft should be (false)
-    ans.right.get should be (SearchFilter(Some("Java"), Some("new york")))
+    ans.right.get should be (SearchFilter(Some("new york"), Some("Java")))
   }
 
 
@@ -32,14 +32,14 @@ class QueryParserTest  extends FlatSpec with Matchers{
     val ans = QueryParser.parse("Java developer in new york")
     println(ans)
     ans.isLeft should be (false)
-    ans.right.get should be (SearchFilter(Some("Java"), Some("new york")))
+    ans.right.get should be (SearchFilter(Some("new york"), Some("Java")))
   }
 
   "Query Parser" should "Java Developer in new york" in {
     val ans = QueryParser.parse("Java Developer in new york")
     println(ans)
     ans.isLeft should be (false)
-    ans.right.get should be (SearchFilter(Some("Java"), Some("new york")))
+    ans.right.get should be (SearchFilter(Some("new york"), Some("Java")))
   }
 
 
@@ -47,14 +47,14 @@ class QueryParserTest  extends FlatSpec with Matchers{
     val ans = QueryParser.parse("Scala developers")
     System.err.println(ans)
     ans.isLeft should be (false)
-    ans.right.get should be (SearchFilter(Some("Scala"), None))
+    ans.right.get should be (SearchFilter(None, Some("Scala")))
   }
 
   "Query Parser" should "Scala Developers" in {
     val ans = QueryParser.parse("Scala Developers")
     System.err.println(ans)
     ans.isLeft should be (false)
-    ans.right.get should be (SearchFilter(Some("Scala"), None))
+    ans.right.get should be (SearchFilter(None, Some("Scala")))
   }
 
   "Query Parser" should "developers in san jose" in {
@@ -62,7 +62,7 @@ class QueryParserTest  extends FlatSpec with Matchers{
     println(ans)
 
     ans.isLeft should be (false)
-    ans.right.get should be (SearchFilter(None, Some("san jose")))
+    ans.right.get should be (SearchFilter(Some("san jose"), None))
   }
 //  "Query Parser" should "San Francisco" in {
 //    val ans = QueryParser.parse("San Francisco")
