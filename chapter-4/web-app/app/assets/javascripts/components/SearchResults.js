@@ -2,14 +2,34 @@
 
 import React from 'react';
 import { Link } from 'react-router';
-import {List, Image} from 'semantic-ui-react';
+import {List, Image, Message, Icon} from 'semantic-ui-react';
 export default class SearchResults extends React.Component {
 
-	renderDefaultView(){
+	renderNotFoundView(){
+			return (
+				<Message icon>
+					<Icon name='ban'/>
+					<Message.Content>
+						<Message.Header>No results found.</Message.Header>
+						Try searching 'scala developers in singapore'
+					</Message.Content>
+				</Message>
+			)
+
+	}
+
+	renderLoadingView(){
 		return (
-			<div><p>No results </p></div>
+				<Message icon>
+					<Icon name='circle notched' loading />
+					<Message.Content>
+						<Message.Header>Just one second</Message.Header>
+			  			Loading results....
+					</Message.Content>
+				</Message>
 			)
 	}
+	
 	/*
 	soTag:
 	{id: 1, name: "scala"}
@@ -20,30 +40,35 @@ export default class SearchResults extends React.Component {
 		let content = []
 		results.forEach( row =>{
 			content.push(
-			    <List.Item>
-			      <Image avatar src='https://react.semantic-ui.com//assets/images/avatar/small/rachel.png' />
-			      <List.Content>
-			        <List.Header as='h4'>{row.soUser.name}</List.Header>
-			        <List.Description>Lives in <a><b>{row.soUser.location}</b></a></List.Description>
-			      </List.Content>
-			    </List.Item>
+					<List.Item>
+						<Image avatar src='https://react.semantic-ui.com//assets/images/avatar/small/rachel.png' />
+						<List.Content>
+							<List.Header as='h4'>{row.soUser.name}</List.Header>
+							<List.Description>Lives in <a><b>{row.soUser.location}</b></a></List.Description>
+						</List.Content>
+					</List.Item>
 			)
 		})
 		return content
 	}
 
-  	render() {
-  		debugger
-  		// return this.renderDefaultView()
-  		if(Array.isArray(this.props.results) && this.props.results.length > 0){
-  			return(
-  				<List> {this.renderRows(this.props.results)} </List>
-  			)
-  		} else {
-  			return (
-	    	this.renderDefaultView()
-    		);	
-  		}
-    	
-  }
+	render() {
+		// Loading View
+		if( this.props.loading) {
+			return this.renderLoadingView()
+		}
+		if(Array.isArray(this.props.results) && this.props.results.length > 0){
+			return(
+				<List> {this.renderRows(this.props.results)} </List>
+			)
+		}
+
+		// No results found view.
+		if(Array.isArray(this.props.results) && this.props.results.length == 0){
+			return this.renderNotFoundView()
+		}
+
+		// Default View.
+		return this.renderNotFoundView()
+	}
 }

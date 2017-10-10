@@ -15,11 +15,15 @@ export default class DashboardPage extends React.Component {
 		this.state = {
 			loggedIn : null,
 			results: [],
-			query: null
+			query: null,
+			loading : false
 		}
 	}
 	handleSearchClick(){
 		let self = this;
+		this.setState({
+			loading: true
+		});
 		return fetch(`${this.hostname}/api/v1/searchQuery?query=${this.state.query}`,{
 			credentials:"same-origin"
 		})
@@ -32,10 +36,12 @@ export default class DashboardPage extends React.Component {
 			
 		}).then(function(body) {
 			self.setState({
+				loading: false,
 				results : body.message
 			})
 		}).catch(function(err){
 			self.setState({
+				loading: false,
 				results:[]
 			})
 		})
@@ -78,16 +84,16 @@ export default class DashboardPage extends React.Component {
 						ref="query"
 						placeholder='scala developers in singapore...'
 						/>
-						<Button secondary onClick={this.handleSearchClick.bind(this)}>Search</Button>
+						<Button fluid secondary onClick={this.handleSearchClick.bind(this)}>Search</Button>
 					</div>
-					<SearchResults results={this.state.results} />
+					<SearchResults loading={this.state.loading} results={this.state.results} />
 				</div>
 		} else {
 			// Redirect user to homepage
-			// window.location.href=this.hostname
+			window.location.href=this.hostname
 		}
 		return (      
-			<div className="athlete-full" style={{margin:"auto",marginLeft:'30%'}}>
+			<div className="athlete-full" style={{margin:"auto",marginRight:'30%',marginLeft:'30%'}}>
 				{content}       
 			</div>
 		);

@@ -38,7 +38,7 @@ export default class Layout extends React.Component {
     return (
       <div>
         <Sidebar.Pushable as={Segment}>
-          <Sidebar as={Menu} animation='scale down' width='thin' direction='right' visible={visible} icon='labeled' vertical inverted>
+          <Sidebar as={Menu} animation='overlay' width='thin' direction='right' visible={visible} icon='labeled' vertical inverted>
             <Menu.Item name='welcome'>
               Welcome {this.state.email}
             </Menu.Item>
@@ -57,7 +57,7 @@ export default class Layout extends React.Component {
                           <Link to="/">
                           <Header as='h2'>
                             <Image shape='circular' src='http://semantic-ui.com/images/avatar2/large/patrick.png' />
-                            {' '} Seeker2
+                            {' '} Seeker
                           </Header>
                           </Link>
                       </Grid.Column>
