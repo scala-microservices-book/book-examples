@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {Form, Button, Input, Header} from 'semantic-ui-react';
+import {Form, Button, Input, Header, Message} from 'semantic-ui-react';
 import queryString from 'query-string';
 
 const loginForm = {
@@ -14,10 +14,11 @@ export default class RegisterPage extends React.Component {
     super();
     this.hostname = window.location.protocol + "//" + window.location.hostname + ":"+(window.location.port);
     this.state = {
-      loading : '',
-      loggedIn:null,
-      email:null,
-      password:null
+      loading: false,
+      loggedIn: false,
+      email: null,
+      password: null,
+      flashMessage: ''
     }
   }
 
@@ -34,11 +35,11 @@ export default class RegisterPage extends React.Component {
       }
     }).then(function(body) {
       self.setState({
-        loggedIn : true
+        loggedIn: true
       })
     }).catch(function(err){
       self.setState({
-        loggedIn :false 
+        loggedIn: false 
       })
     })
   }
@@ -47,9 +48,18 @@ export default class RegisterPage extends React.Component {
     if(this.state.loggedIn){
       window.location.href= this.hostname+'/dashboard'
     }
+    let message = ""
+    if( this.state.flashMessage != ''){
+      message = <Message
+          info
+          header={this.state.flashMessage}
+          content=""
+        />
+    }
     return (
       <div className="home">
         <div style={loginForm}>
+        {message}
         <Header as='h2'> Register new Account </Header>
         <Header as='h4'> <a href="/">Old User? Login here.</a> </Header>
         <Form loading={this.state.loading}>
@@ -76,9 +86,9 @@ export default class RegisterPage extends React.Component {
   }
 
   sendRegisterRequest(){
-      let self = this;
+    let self = this;
     this.setState({
-      loading:'loading'
+      loading: true
     });
     return fetch(this.hostname+"/api/register",{
       method:'POST',
@@ -90,10 +100,17 @@ export default class RegisterPage extends React.Component {
       })
     })
     .then(function(response) {
-      console.log(response);
-      return response.json()
-    }).then(function(){
-      window.location.href=self.hostname+"/dashboard";
+      if(response.status == 200){
+        return response.json()  
+      }
+      self.setState({
+        loggedIn: false,
+        loading: false,
+        flashMessage: "Registration failed with response code: "+response.status
+      });
+      throw new Error(response.status)
+    }).then(function(responseObj){
+      window.location.href=self.hostname+"/dashboard?tokenStr="+responseObj.message.tokenStr;
     })
   }
 }

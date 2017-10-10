@@ -48,15 +48,18 @@ export default class IndexPage extends React.Component {
 		if(this.state.loggedIn){
 			window.location.href= this.hostname+'/dashboard'
 		}
-		return (
-			<div className="home">        
-				<div style={loginForm}>
-				<Message
+		let message = ""
+		if( this.state.flashMessage != ''){
+			message = <Message
 					info
-					visible={!(this.state.flashMessage=='')}
 					header={this.state.flashMessage}
 					content=""
 				/>
+		}
+		return (
+			<div className="home">        
+				<div style={loginForm}>
+				{message}
 				<Header as='h2'> Log In </Header>
 					<Header as='h4'> <a href="/register">New User? Register here.</a> </Header>
 					<Form loading={this.state.loading}>
